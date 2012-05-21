@@ -15,7 +15,6 @@
 (function( $, undefined ) {
 
 $.widget("ui.selectable", $.ui.mouse, {
-	version: "@VERSION",
 	options: {
 		appendTo: 'body',
 		autoRefresh: true,
@@ -258,6 +257,10 @@ $.widget("ui.selectable", $.ui.mouse, {
 		return false;
 	}
 
+});
+
+$.extend($.ui.selectable, {
+	version: "@VERSION"
 });
 
 })(jQuery);

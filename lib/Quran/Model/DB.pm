@@ -7,9 +7,8 @@ use base 'Catalyst::Model::DBIC::Schema';
 __PACKAGE__->config(
 	schema_class => 'Quran::Schema',
 	connect_info => {
-		dsn => 'dbi:Pg:dbname='. Quran->config->{database}->{dbname} .';host='. Quran->config->{database}->{host} .';port='. Quran->config->{database}->{port},
+		dsn => Quran->config->{database}->{dsn},
 		user => Quran->config->{database}->{user},
-		host => Quran->config->{database}->{host},
 		password => Quran->config->{database}->{password},
 		pg_bool_tf => 0,
 		pg_enable_utf8 => 1,

@@ -42,3 +42,5 @@ lib/Quran.tmp
 .*.log
 important/
 quran.yml
+jira/
+*/.git/*

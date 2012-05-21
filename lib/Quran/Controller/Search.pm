@@ -13,7 +13,7 @@ use List::Util qw/min/;
 
 BEGIN { extends 'Catalyst::Controller' }
 
-sub base :Chained('/') :PathPart('search') :CaptureArgs(0) {
+sub base :Chained('/base') :PathPart('search') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 
 	$c->controller('Main')->base($c);
@@ -29,7 +29,7 @@ sub base :Chained('/') :PathPart('search') :CaptureArgs(0) {
 
 	$c->stash(
 		template => 'screen/search/view.mhtml',
-		   class => 'search'
+		    view => 'search'
 	);
 }
 
@@ -108,7 +108,7 @@ sub view :Chained('base') :PathPart('') :Args(0) {
 	$stash->{query} = $query;
 	$stash->{json}->{query} = $stash->{query};
 
-	$stash->{json}->{class} = $stash->{class};
+	$stash->{json}->{view} = $stash->{view};
 	$stash->{json}->{modules} = '*.*';
 }
 

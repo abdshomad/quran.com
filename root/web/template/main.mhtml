@@ -1,0 +1,43 @@
+<div class="section static top above" data-ua="<% $stash->{ua} %>">
+	<div class="wrap-out">
+		<div class="wrap-in">
+			<div id="search" dir="<% $dir %>">
+				<& main/search.mhtml &>
+			</div>
+			<div id="nav" dir="<% $dir %>">
+				<& main/nav.mhtml &>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="section static top below" data-ua="<% $stash->{ua} %>">
+	<div class="wrap-out">
+		<div class="wrap-in">
+			<div id="dash">
+				<& main/dash.mhtml &>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="section scroll" id="scroll" data-ua="<% $stash->{ua} %>">
+	<div class="wrap-out">
+		<div class="wrap-in">
+			<div id="header">
+				<& main/header.mhtml &>
+			</div>
+			<div id="ayat">
+				<& main/ayat/style.mhtml &>
+				<& main/ayat/ayah.mhtml &>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="section static bottom" id="bottom" data-ua="<% $stash->{ua} %>">
+	<div class="wrap-out">
+		<div class="wrap-in">
+			<div id="player">
+				<& main/player.mhtml &>
+			</div>
+		</div>
+	</div>
+</div>

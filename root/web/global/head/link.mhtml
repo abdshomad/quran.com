@@ -1,0 +1,34 @@
+<%perl>
+	if ($stash->{static}->{css}) {
+		if (ref $stash->{static}->{css} eq 'ARRAY') {
+			for (my $i = 0; $i < @{ $stash->{static}->{css} }; $i++) {
+				my $css = $stash->{static}->{css}->[ $i ];
+</%perl>
+<link rel="stylesheet" type="text/css" media="all" href="http://s<% $i %>.quran.com/css/<% $_ %>.css" />
+<%perl>
+			}
+		}
+		else {
+</%perl>
+<!--
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/deprecated.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/screen.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/new.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/less.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="/static/css/all.css"/>
+<link rel="stylesheet" type="text/css" media="print" href="/static/css/print.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/screen.css"/>
+<link rel="stylesheet" type="text/css" media="etc" href="/static/css/etc.css"/>
+<link rel="stylesheet" type="text/css" media="etc" href="/static/css/etc.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="/static/css/$class.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/dev.css"/>
+-->
+<link rel="stylesheet" type="text/css" media="all" href="http://s0.quran.com/css/layout.css" />
+<link rel="stylesheet" type="text/css" media="all" href="http://s0.quran.com/css/mobile.css" />
+<!--
+<link rel="stylesheet" type="text/css" media="all" href="http://s0.quran.com/css/colors.css" />
+-->
+<%perl>
+		}
+	}
+</%perl>

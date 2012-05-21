@@ -1,0 +1,64 @@
+<table id="player-table">
+	<tbody id="player-tbody">
+		<tr id="player-tr">
+			<td id="player-td" class="audioPlayer">
+				<ul id="player-ul" class="player">
+					<li id="player-state" class="state pre"></li>
+					<li id="player-audio" class="sound"><audio preload="auto"></audio></li>
+					<li id="player-ui" class="ui">
+						<table class="instance">
+							<tbody>
+								<tr>
+									<td class="play"><div class="wrap">
+										<span class="icon audio play">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+									</div></td>
+									<td class="track"><div class="wrap"><div class="range"><span class="buffer"></span></div></div></td>
+									<td class="time"><div class="wrap"><span class="elapsed">--:--</span></div></td>
+									<td class="config"><div class="wrap">
+										<span class="icon audio config" title="<% $c->i18n->localize($c, 'Configuration Settings', { context => 'audioPlayer', attribute => 'title' }) %>">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<div class="panel">
+											<ul class="list body">
+												<li class="item volume selected"><div class="range"></div></li>
+											</ul>
+											<ul class="list strip">
+												<li class="item volume selected">
+													<span class="icon audio volume-2">
+														<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+													</span>
+												</li>
+											</ul>
+										</div>
+									</div></td>
+									<td class="reciter"><div class="wrap">
+										<span class="icon audio reciter" title="<% $c->i18n->localize($c, 'Choose Reciter', { context => 'audioPlayer', attribute => 'title' }) %>">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<div class="panel">
+											<ul class="list body"></ul>
+											<ul class="list strip"></ul>
+										</div>
+									</div></td>
+									<td class="loop" title="<% $c->i18n->localize($c, 'Loop Playback', { context => 'audioPlayer', attribute => 'title' }) %>"><div class="wrap">
+										<span class="icon audio loop">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+									</div></td>
+									<td class="sequence" title="<% $c->i18n->localize($c, 'Sequence Playback', { context => 'audioPlayer', attribute => 'title' }) %>"><div class="wrap">
+										<span class="icon audio sequence">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+									</div></td>
+									<td class="space"><img src="/static/images/gif/space.gif" alt=""></td>
+								</tr>
+							</tbody>
+						</table>
+					</li>
+				</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>

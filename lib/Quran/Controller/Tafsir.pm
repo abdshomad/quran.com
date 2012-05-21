@@ -7,7 +7,7 @@ BEGIN { extends 'Catalyst::Controller' }
 # TODO: tafsir view implemented through chained controller
 # e.g. /ar/tafsir/al_qurtubi/80/27
 
-sub base :Chained('/') :PathPart('tafsir') :CaptureArgs(3) {
+sub base :Chained('/base') :PathPart('tafsir') :CaptureArgs(3) {
 	my ($self, $c, $resource_code, $surah_id, $ayah_num) = @_;
 	#$c->log->debug(__PACKAGE__ .' : base');
 

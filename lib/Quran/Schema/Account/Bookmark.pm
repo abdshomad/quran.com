@@ -8,7 +8,7 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->table('account.bookmark');
 __PACKAGE__->add_columns(
-	  'bookmark_id' => { data_type => 'integer' => is_auto_increment => 1, is_nullable => 0, sequence => 'bookmark_bookmark_id_seq' => },
+	  'bookmark_id' => { data_type => 'integer' => is_auto_increment => 1, is_nullable => 0, sequence => 'bookmark_bookmark_id_seq' },
 	    'member_id' => { data_type => 'integer', is_foreign_key => 1, is_nullable => 0 },
        'ayah_key' => { data_type => 'text', is_foreign_key => 1, is_nullable => 0 },
   'context_range' => { data_type => 'text', is_nullable => 0 },

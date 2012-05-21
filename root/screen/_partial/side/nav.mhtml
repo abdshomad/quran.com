@@ -1,6 +1,6 @@
-<nav>
-	<header class="search">
-		<form method="GET" action="/<% $stash->{language}->{language_code} %>/search">
+<nav class="nav">
+	<header class="header search">
+		<form method="GET" action="/search">
 			<input class="query sans" type="search" name="q" value="${ query }" placeholder="Search..." autocomplete="off" autofocus="autofocus"/>
 			<button type="button" class="type"><span class="down"></span></button>
 			<div class="type">
@@ -46,7 +46,7 @@
 					my $surah = $stash->{surahs}->[$i-1];
 			</%perl>
 			<li data-number="<% $surah->{number} %>" data-revelation="<% $surah->{order} %>">
-				<a href="<% '/'. $stash->{language}->{language_code} .'/'. $i %>">
+				<a href="<% '/'. $i .'/' %>">
 					<span class="number" data-sort="<% $i %>"><% $c->i18n->localize($c, $i, { context => 'number' }) %></span>
 					<span class="num-sep sep">-</span>
 					<span class="name"><% $c->i18n->localize($c, $surah->{simple}, { context => 'chapter title' }) %></span>

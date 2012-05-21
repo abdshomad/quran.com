@@ -42,25 +42,34 @@ user-agent.
 }
 =cut
 
-sub for_pages :Private {
+sub css :Private {
 	my ($self, $c, $pages) = (shift, shift, shift);
 	my ($local, $cdn, $browser) = (0, 'c216429.r29.cf1.rackcdn.com', $c->request->browser);
 	my ($engine, $css) = ($browser->engine_string);
 
+	$local = 1;
+=cut
 	if (defined $engine and ($engine eq 'Gecko' or $engine eq 'MSIE')) {
 		$local = 1;
 	}
+
+=cut
 
 	if ($local) {
 		for my $n (@{ $pages }) {
 			push @{ $css }, <<END
 \@font-face {
-	font-family: 'p$n';
-	src: url('/static/fonts/compressed/eot/p$n.eot');
-	src: url('/static/fonts/compressed/eot/p$n.eot?#iefix') format('embedded-opentype'), url('/static/fonts/woff/p$n.woff') format('woff'), url('/static/fonts/compressed/ttf/p$n.ttf') format('truetype'), url('/static/fonts/compressed/svg/p$n.svg#p$n') format('svg');
+	font-family: p$n;
+	font-style: normal;
+	font-weight: normal;
+	src: url('http://quran.com/static/fonts/compressed/eot/p$n.eot');
+	src: url('http://quran.com/static/fonts/compressed/eot/p$n.eot?#iefix') format('embedded-opentype'),
+	     url('http://quran.com/static/fonts/woff/p$n.woff') format('woff'),
+	     url('http://quran.com/static/fonts/compressed/ttf/p$n.ttf') format('truetype'),
+	     url('http://quran.com/static/fonts/compressed/svg/p$n.svg#p$n') format('svg');
 }
 .p$n {
-	font-family: 'p$n';
+	font-family: p$n;
 }
 END
 			;
@@ -84,20 +93,20 @@ END
 		}
 	}
 
-	$css = join "\n", @{ $css };
+	# TODO: code below is a quick hack, needs proper refactor
+	my $hash;
+	for (my $i = 0; $i < scalar @{ $pages }; $i++) {
+		my $n = $pages->[$i];
+		my $id = "p$n";
+		my $o = $css->[$i];
+		$css->[$i] = ( join "\n", map { $_ =~ s/\s+/ /g; $_ =~ s/^\s+//; $_ =~ s/\s+$//; $_ } ( $css->[$i] ) );
+		$hash->{ $id } = $css->[$i];
+	}
+	return $hash;
 
-	return {
-		  css => $css,
-		pages => $pages
-	};
-}
+	#$css = '<style type="text/css" scoped="scoped">'. ( join "\n", map { $_ =~ s/\s+/ /g; $_ =~ s/^\s+//; $_ =~ s/\s+$//; $_ } @{ $css } ) .'</style>';
 
-sub from_keys :Private {
-	my ($self, $c, $keys, $pages) = (shift, shift, shift);
-
-	$pages = $c->controller('Page')->from_keys($c, $keys);
-
-	return $self->for_pages($c, $pages);
+	#return $css;
 }
 
 =head1 AUTHOR

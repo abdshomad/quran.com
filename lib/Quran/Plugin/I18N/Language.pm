@@ -28,13 +28,13 @@ after setup_finalize => sub {
 		rows => $limit
 	});
 
-	$c->i18n->{language}->{installed}->{hash} = { map { $_->get_column('language_code') => {
+	$c->i18n->config->{language}->{installed}->{hash} = { map { $_->get_column('language_code') => {
 		unicode => $_->get_column('unicode'),
 		english => $_->get_column('english'),
 		   beta => $_->get_column('beta')
 	} } @set };
 
-	$c->i18n->{language}->{installed}->{array} = [ map { $_->get_column('language_code') } @set ];
+	$c->i18n->config->{language}->{installed}->{array} = [ map { $_->get_column('language_code') } @set ];
 
 };
 

@@ -1,0 +1,76 @@
+<h2>navigator</h2>
+<!--
+<div class="accordion ui-hide">
+	<h3>surahs</h3>
+	<div>
+		<div class="header">
+			<div class="filter">
+				<input class="filter-input" type="text" />
+			</div>
+			<div class="selectmenu-button-div">
+				<a class="selectmenu-button">
+					<span class="selectmenu-label">
+						label
+					</span>
+					<span class="selectmenu-icon">
+						i
+					</span>
+				</a>
+			</div>
+			<div class="selectmenu-menu">
+				<ul class="selectmenu-menu-list">
+					<li class="selectmenu-menu-item">
+						<a class="selectmenu-menu-item-button">
+							<span class="selectmenu-menu-item-button-label">
+								label
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="list">
+			<div class="list-back">
+				<a class="list-back-button">
+					<span class="list-back-button-icon">
+						b
+					</span>
+				</a>
+			</div>
+			<div class="list-list-div">
+				<ul class="list-list">
+					<li class="list-item">
+						<a class="list-item-button">
+							<span class="list-item-button-icons-left">
+								l
+							</span>
+							<span class="list-item-button-label-left">
+								left
+							</span>
+							<span class="list-item-button-label-right">
+								right
+							</span>
+							<span class="list-item-button-icons-right">
+								r
+							</span>
+						</a>
+						<a class="list-sub-button">
+							<span class="list-sub-button-icon">
+								s
+							</span>
+						</a>
+						<div class="list-sub">
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<h3>tags</h3>
+	<div>tags box</div>
+	<h3>bookmarks</h3>
+	<div>bookmarks box</div>
+	<h3>lastmark</h3>
+	<div>lastmark box</div>
+</div>
+-->

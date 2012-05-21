@@ -1,0 +1,80 @@
+<div class="ui-bar dash">
+	<table>
+		<tbody>
+			<tr>
+				<td id="surah-select" class="ui-bar-cell">
+					<div class="ui-span y">
+						<div class="ui-selectmenu ui-span x y">
+							<a class="ui-selectmenu-btn">
+								<span>Al-Fatiha</span>
+								<span>b</span>
+							</a>
+							<select class="ui-selectmenu-select ui-span z" data-ua="<% $stash->{ua} %>">
+							<%perl>
+							for (@{ $stash->{surahs} }) {
+								print "<option>$_->{simple}</option>";
+							}
+							</%perl>
+							</select>
+							<div class="ui-selectmenu-menu ui-hide">
+								<ul class="ui-selectmenu-list">
+									<li>
+										<a>
+											<span>
+												list item
+											</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</td>
+				<td class="ui-bar-cell ui-span x">
+					<div id="slider"></div>
+					<div id="ayah-slider" class="ui-span y" style="display:none;">
+						<a class="ui-slider-handle"></a>
+					</div>
+				</td>
+				<td class="ui-bar-cell">
+					<div class="ui-spinner ui-span y">
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<div class="ui-spinner-spin-wrap ui-span y">
+											<input class="ui-spinner-spin up" type="button" value="u" />
+											<input class="ui-spinner-spin down" type="button" value="d" />
+										</div>
+									</td>
+									<td>
+										<div class="ui-spinner-input-wrap ui-span y">
+											<input id="ayah-input" class="ui-spinner-input ui-span x y b" type="number" min="1" max="286" value="1" />
+										</div>
+									</td>
+									<td class="ui-spinner-select-cell">
+										<div class="ui-spinner-select-wrap ui-span y" data-ua="<% $stash->{ua} %>" dir="<% $dir %>">
+											<select id="ayah-select" class="ui-spinner-select" data-ua="<% $stash->{ua} %>" dir="<% $dir %>">
+												<%perl>
+												for (1 .. $stash->{surah}->{ayahs}) {
+													print "<option>$_</option>";
+												}
+												</%perl>
+											</select>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+				<td id="surah-info" class="ui-bar-cell ui-span y">
+					i
+				</td>
+				<td id="view-config" class="ui-bar-cell ui-span y">
+					c
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

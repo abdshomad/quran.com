@@ -4,23 +4,25 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
-sub base :Chained('/') :PathPart('') :CaptureArgs(0) {
+sub base :Chained('/base') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = (shift, @_);
-	my $stash = $c->stash;
+	my ($stash) = ($c->stash);
 
 	$stash->{static} = { js => 1, css => 1 };
 	$stash->{include} = { head => 1, body => 1, foot => 1 };
 	$stash->{options} = $c->model('Options')->options($c);
 }
 
-sub _surah :Chained('base') :PathPart('') :CaptureArgs(1) {
+sub _surah :Chained('base') :PathPart('') :CaptureArgs(1) :Match('^\d{1,3}$') {
 	my ($self, $c, $id) = (shift, @_);
+	my ($stash) = ($c->stash);
 
 	if ($id =~ /^\d{1,3}$/ and $id >= 1 and $id <= 114) {
+		my $surah = $stash->{surahs}->[ $id - 1 ];
+
 		$c->stash(
-			surah_id => $id,
-			template => 'screen/main/view.mhtml',
-			   class => 'main'
+			surah => $surah,
+			template => 'web/template/main.mhtml'
 		);
 	}
 	else {
@@ -28,88 +30,64 @@ sub _surah :Chained('base') :PathPart('') :CaptureArgs(1) {
 	}
 }
 
+# load two pages first instead of 1
+
 sub surah :Chained('_surah') :PathPart('') :Args(0) {
 	my ($self, $c) = (shift, @_);
-	my $surah = $c->stash->{surahs}->[ $c->stash->{surah_id} - 1 ];
-	my $page = $c->controller('Page')->range($c, { surah => $c->stash->{surah_id}, start => 1, pages => 2 });
+	my ($stash) = ($c->stash);
 
-	if ($surah->{page_end} <= $surah->{page_start} + 2) {
-		$page->{last} = $surah->{ayahs};
-	}
+	my $range = $c->controller('Page')->range($c, { surah => $stash->{surah}->{surah_id}, start => 1, pages => 2 });
 
-	unless ($page->{last} == $surah->{ayahs}) {
-		$page->{next} = $c->controller('Page')->range($c, { surah => $page->{surah}, start => $page->{last} + 1, pages => 2 });
-	}
+	$stash->{range} = $range;
 
-	$c->stash(
-		     page => $page,
-		bismillah => $surah->{bismillah}
-	);
-
-	$c->response->redirect('/'. $c->stash->{language}->{language_code} .'/'. $c->stash->{surah_id} .'/'. $page->{first} .'-'. $page->{last} .'/');
+	$c->detach('/main/ayah');
 }
 
-sub _ayahs :Chained('_surah') :PathPart('') :CaptureArgs(1) {
+sub _ayah :Chained('_surah') :PathPart('') :CaptureArgs(1) {
 	my ($self, $c, $ayahs) = (shift, @_);
 	my $stash = $c->stash;
 
-	return $c->detach('/default') unless $ayahs =~ /^\d{1,3}(-\d{1,3})?$/;
+	return $c->detach('/default') unless $ayahs =~ /^\d{1,3}(-\d{1,3})?+$/;
 
-	my $page = {
-		surah => $stash->{surah_id}
-	};;
-	($page->{first}, $page->{last}) = split m{-}, $ayahs, 2;
+	my $range = [split m{-}, $ayahs, 2];
 
-	return $c->detach('/default') unless $page->{first} >= 1;
+	return $c->detach('/default') unless $range->[0] >= 1;
 
-	my $surah = $stash->{surahs}->[ $stash->{surah_id} - 1 ];
-
-	if ($page->{last}) {
+	if ($range->[1]) {
 		return $c->detach('/default')
-			unless $page->{last} > $page->{first}
-				and $page->{last} <= $surah->{ayahs};
+			unless $range->[1] > $range->[0]
+				and $range->[1] <= $stash->{surah}->{ayahs};
 	}
-	else { $page->{last} = $page->{first}; }
+	else { $range->[1] = $range->[0]; }
 
-	unless ($page->{first} == 1) {
-		$page->{prev} = $c->controller('Page')->range($c, { surah => $page->{surah}, end => $page->{first} - 1, pages => 2 });
-	}
-
-	unless ($page->{last} == $surah->{ayahs}) {
-		$page->{next} = $c->controller('Page')->range($c, { surah => $page->{surah}, start => $page->{last} + 1, pages => 2 });
-	}
-
-	$stash->{page} = $page;
-	$stash->{json}->{page} = $stash->{page};
-
-	$stash->{bismillah} = ($surah->{bismillah} and $page->{first} == 1);
+	$stash->{range} = $range;
 }
 
-sub view :Chained('_ayahs') :PathPart('') :Args(0) {
+sub ayah :Chained('_ayah') :PathPart('') :Args(0) {
 	my ($self, $c, $partial) = (shift, shift, shift);
-	my ($stash, $session, $cache) = ($c->stash, $c->session, $c->cache('memcache'));
-	my ($language_code, $keys, $content) = ($stash->{language}->{language_code}, [ map { "$stash->{page}->{surah}:$_" } $stash->{page}->{first} .. $stash->{page}->{last} ]);
-
-	# quick hack
-	$stash->{page}->{first} = $stash->{page}->{surah} .':'. $stash->{page}->{first};
-	$stash->{page}->{last} = $stash->{page}->{surah} .':'. $stash->{page}->{last};
+	my $stash = $c->stash;
+	my $keys = [ map { "$stash->{surah}->{surah_id}:$_" } $stash->{range}->[0] .. $stash->{range}->[1] ];
 
 	$self->stash_session_content($c, $keys);
 
-	$stash->{json}->{class} = 'main';
-	$stash->{json}->{modules} = '*.*';
-
 	if ($partial) {
-		return $c->view('Mason')->render($c, 'screen/main/_partial/ayahs.mhtml');
+		$partial = $c->view('Mason')->render($c, 'web/template/main/ayat/ayah.mhtml');
+		return $partial;
 	}
-
-	#$c->response->body('debug'); # use this to differentiate internal performance from view performance, base cost is ~10ms, target is ~15-30 ms
 }
 
 sub stash_session_content {
 	my ($self, $c, $keys) = (shift, shift, shift);
 	my ($stash, $session, $cache) = ($c->stash, $c->session, $c->cache('memcache'));
 	my ($language_code, $content) = ($stash->{language}->{language_code});
+
+	$stash->{keys} = $keys;
+	$stash->{pages} = $c->controller('Page')->from_keys($c, $keys);
+	$stash->{fonts} = $c->controller('Fonts')->css($c, $stash->{pages});
+	$stash->{lookup} = $c->controller('Page')->lookup($c, $stash->{surah}->{surah_id});
+
+
+	$stash->{content}->{ $_ }->{page} = $c->controller('Page')->from_key($c, $_) for @{ $keys };
 
 	for my $type (keys %{ $session->{content}->{resources}->{ $language_code } }) {
 		for my $resource_code (keys %{ $session->{content}->{resources}->{ $language_code }->{ $type } }) {
@@ -134,13 +112,6 @@ sub stash_session_content {
 	}
 
 	$stash->{content}->{ $_ }->{quran} = $content->{quran}->{ $_ } for @{ $keys };
-	$stash->{json}->{content} = $stash->{content} if $c->debug;
-
-	$stash->{keys} = $keys;
-	$stash->{json}->{keys} = $stash->{keys};
-
-	$stash->{fonts} = $c->controller('Fonts')->from_keys($c, $keys);
-	$stash->{json}->{pages} = $stash->{fonts}->{pages};
 
 	unless ($stash->{audio}->{reciter} = $cache->get('audio.reciter')) {
 		my @result = $c->model('DB::Audio::Reciter')->search(undef, { order_by => [{ -asc => 'priority' }, { -asc => 'path' }] });
@@ -153,7 +124,6 @@ sub stash_session_content {
 
 		$cache->set('audio.reciter', $stash->{audio}->{reciter});
 	}
-	$stash->{json}->{audio} = $stash->{audio};
 
 	# account/member specific content
 	if ($c->user_exists) {
@@ -167,6 +137,7 @@ sub stash_session_content {
 			 columns => [{ surah => 'ayah.surah_id' }, { ayah => 'ayah.ayah_num' }, { key => 'me.ayah_key' }, { range => 'me.context_range' }, { state => 'me.context_state' }],
 			order_by => [{ -asc => 'ayah.surah_id' }, { -asc => 'ayah.ayah_num' }]
 		});
+
 		while (my $result = $set->next) {
 			$stash->{account}->{bookmarks}->{ $result->get_column('surah') }->{ $result->get_column('ayah') } = {
 				    key => $result->get_column('key'),
@@ -175,6 +146,18 @@ sub stash_session_content {
 					state => $result->get_column('state')
 				}
 			};
+		}
+
+		$set = $c->user->tag->search_rs({
+				'ayah.surah_id' => $stash->{surah}->{surah_id}
+		}, {
+			    join => ['ayah', 'collective'],
+			 columns => [{ tag => 'collective.value' }, { key => 'me.ayah_key' }],
+			order_by => [{ -asc => 'ayah.ayah_num' }, { -asc => 'collective.value' }]
+		});
+
+		while (my $result = $set->next) {
+			push @{ $stash->{account}->{tags}->{ $result->get_column('key') } }, $result->get_column('tag');
 		}
 
 		$stash->{account}->{lastmark} = {
@@ -188,7 +171,6 @@ sub stash_session_content {
 		my @roles = $c->user->roles;
 		$stash->{account}->{roles} = \@roles;
 	}
-	$stash->{json}->{account} = $stash->{account};
 }
 
 =cut
@@ -240,7 +222,7 @@ sub stash_session_content {
 	);
 	my @pages = $page_num_start .. $page_num_end;
 
-	$stash->{fonts} = $c->controller('Fonts')->fonts($c, @pages);
+	$stash->{fonts} = $c->controller('Fonts')->css($c, @pages);
 
 	$stash->{keys} = $keys;
 	$stash->{json}->{keys} = $stash->{keys};

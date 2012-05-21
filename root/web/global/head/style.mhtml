@@ -1,0 +1,7 @@
+<style type="text/css">
+	#head { display: none; }
+	#side { display: none; }
+	#foot { display: none; }
+	#content > .head { display: none; }
+	#content > .foot { display: none; }
+</style>

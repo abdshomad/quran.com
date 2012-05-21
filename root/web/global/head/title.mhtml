@@ -1,0 +1,2 @@
+<title>quran.com / <% $c->request->uri->path .' - '. $c->i18n->localize($c, "The Noble Qur'an", { context => 'website title', attribute => 1 }) %></title>
+

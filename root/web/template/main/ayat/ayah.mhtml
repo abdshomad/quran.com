@@ -1,0 +1,149 @@
+<%flags>
+	inherit => undef
+</%flags>
+<%perl>
+	my $stash = $c->stash;
+	my $view = $c->controller('View');
+	my $request = $c->request;
+	my $params = $request->params;
+	my $session = $c->session;
+	my $lang = $stash->{language}->{language_code};
+	my $dir = $stash->{language}->{direction};
+
+	for my $key (@{ $stash->{keys} }) {
+		my $content = $stash->{content}->{ $key };
+		my $page = $content->{page};
+		my ($surah, $ayah) = split /:/, $key, 2;
+		my $id = $surah .'-'. $ayah;
+</%perl>
+<div class="ayah" id="ayah-<% $id %>" data-key="<% $key %>" data-page="<% $page %>" data-surah="<% $surah %>" data-ayah="<% $ayah %>">
+	<a class="anchor" id="anchor-<% $id %>"></a>
+	<div class="ayah-section quran">
+		<table class="top-table quran-top">
+			<tbody>
+				<tr>
+					<td class="ayah-header"><h2>Ayah #<% $ayah %></h2></td>
+					<td class="ui-span x"><a class="audio">a</a></td>
+					<td><a class="options">o</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="content-block fixed-dir quran-content" style="font-size: <% $session->{navMenu}->{textSize}->{quran} ? $session->{navMenu}->{textSize}->{quran} : 80 %>%;" lang="ar" dir="rtl">
+			<%perl>if ($content->{quran}->{images}) {</%perl>
+			<div class="quran-panel img">
+				<img src="<% $content->{quran}->{images}->{url} %>" alt="<% $content->{quran}->{images}->{alt} %>" width="<% $content->{quran}->{images}->{width} %>" height="<% $content->{quran}->{images}->{height} %>" />
+			</div>
+			<%perl>} elsif ($content->{quran}->{words}) {</%perl>
+			<div class="quran-panel font p<% $content->{quran}->{words}->[0]->{page} %>">
+				<%perl>
+					my $line;
+					for (my $i = 0; $i < scalar @{ $content->{quran}->{words} }; $i++) {
+						my $a = $content->{quran}->{words}->[$i];
+						my $translation = $a->{translation};
+						my $attrs = "class=\"glyph $a->{type}\"". ( $a->{type} eq 'word' and $translation ? " data-translation=\"$translation\"" : '' );
+						my $space = $a->{type} eq 'word' && $i > 0 ? ' ' : '';
+						$line .= "$space<a $attrs>$a->{code}</a>";
+					}
+				</%perl>
+				<% $line %>
+			</div>
+			<%perl>} elsif ($content->{quran}->{text}) {</%perl>
+			<div class="quran-panel text <% $content->{quran}->{text}->{resource_code} %>"><% $content->{quran}->{text}->{text} %></div>
+			<%perl>}</%perl>
+		</div>
+		<div class="function-dock-lateral right">
+			<div class="function-dock-vertical top">
+				<div class="function-set change">
+					<div class="prev">p</div>
+					<div class="next">n</div>
+				</div>
+			</div>
+			<div class="function-dock-vertical bottom">
+				<div class="function-set generic">
+					<div class="link">l</div>
+					<div class="email">e</div>
+					<div class="print">p</div>
+				</div>
+			</div>
+		</div>
+		<div class="function-dock-lateral left">
+			<div class="function-dock-vertical top">
+				<div class="function-set social">
+					<div class="facebook">f</div>
+					<div class="twitter">t</div>
+				</div>
+			</div>
+			<div class="function-dock-vertical bottom">
+				<div class="function-set user">
+					<div class="tag">t</div>
+					<div class="bookmark">b</div>
+					<div class="lastmark">l</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ayah-section resource">
+		<%perl>
+			my (@data, @resource);
+
+			if ($lang eq 'ar') {
+				@data = @{ $stash->{options}->{resources}->{tafsir} };
+			}
+			else {
+				@data = @{ $content->{resources} };
+			}
+			
+			for my $data (@data) {
+				if ($lang eq 'ar') {
+					my $id = "resource-tafsir-$data->{resource_code}-$surah-$ayah";
+					push @resource, {
+						id => $id,
+						href => "http://ar.quran.com/tafsir/$data->{resource_code}/$surah/$ayah#$id",
+						label => $data->{name}
+					};
+				}
+				else {
+					my $id = "resource-$data->{type}-$data->{resource_code}-$surah-$ayah";
+					push @resource, {
+						id => $id,
+						href => "#$id",
+						label => $data->{name},
+						content => $data->{text}
+					};
+				}
+			}
+		</%perl>
+		<table class="top-table resource-top">
+			<tbody>
+				<tr>
+					<td>Resource</td>
+					<td class="ui-span x resource-tabs">
+						<ul class="resource-nav">
+						<%perl>
+							for (@resource) {
+								print "<li class='resource-nav-li'><a href='$_->{href}' class='resource-nav-a'>$_->{label}</a></li>";
+							}
+						</%perl>
+						</ul>
+					</td>
+					<td><a class="options">o</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="content-block resource-content" style="font-size: <% $session->{navMenu}->{textSize}->{resources} ? $session->{navMenu}->{textSize}->{resources} : 120 %>%;">
+		<%perl>
+			for (@resource) {
+				$_->{content} = ( $_->{content} or '' );
+				if ($_->{content}) {
+					$_->{content} =~ s/[\s]+/<\/a> <a>/g;
+					$_->{content} = '<a>'. $_->{content} .'</a>';
+				}
+				print "<div id='$_->{id}' class='resource-panel'>$_->{content}</div>";
+			}
+		</%perl>
+		</div>
+	</div>
+</div>
+<%perl>
+	}
+</%perl>

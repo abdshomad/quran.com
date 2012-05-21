@@ -1,0 +1,1 @@
+<div class="foot"></div>

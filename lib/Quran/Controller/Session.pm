@@ -4,7 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
-sub base :Chained('/') :PathPart('session') :CaptureArgs(0) {
+sub base :Chained('/base') :PathPart('session') :CaptureArgs(0) {
 	my ($self, $c) = (shift, shift);
 	my ($params, $stash, $session, $model) = ($c->request->data, $c->stash, $c->session, $c->model('Session'));
 

@@ -1,5 +1,7 @@
 static/.firefile/*
-static/css/*.backup
 static/sitemap.txt
 static/fonts/*
 screen/sign/*
+static/css/*.backup*
+static/css/deprecated.css
+static/.cache/*

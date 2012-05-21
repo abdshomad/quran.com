@@ -1,0 +1,21 @@
+steal(
+	'quran/class'
+);
+/*
+	'src/ui/scrollLoader.js',
+	'src/ui/scrollReady.js',
+	'src/ui/scrollKeys.js'
+ 'src/ui/search.js',
+	'src/ui/nav.js',
+	'src/ui/dash.js',
+
+	'src/inc/json2.js',
+	'src/inc/script.js',
+	'src/inc/jquery.misc.js',
+	'src/inc/jquery.mousewheel.js'
+	'src/inc/jquery.tmpl.js'
+	'src/inc/jquery.ui.notification.js',
+	'src/inc/jquery.ui.resizable.js'
+	'mxui/nav/navigation',
+	'mxui/nav/paginator',
+*/

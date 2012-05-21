@@ -1,31 +1,17 @@
 <&| /screen/_partial/content.mhtml &>
-	<header>
+	<%perl>for my $font (values %{ $stash->{fonts} }) {</%perl>
+	<% $font %>
+	<%perl>}</%perl>
+	<div class="header">
 		<%perl>if ($stash->{bismillah}) {</%perl>
-		<span class="bismillah" title="<% $stash->{utf8}->{bismillah} %>"></span>
+		<div class="centered">
+			<div class="inside">
+				<div class="bismillah" title="<% $stash->{utf8}->{bismillah} %>">
+					<div class="image"></div>
+				</div>
+			</div>
+		</div>
 		<%perl>}</%perl>
-	</header>
+	</div>
 	<& /screen/_partial/content/ayahs.mhtml &>
-	<footer>
-		<nav>
-			<%perl>if ($stash->{page}->{prev}) {</%perl>
-			<a class="prev" href="<% "/$stash->{language}->{language_code}/$stash->{page}->{prev}->{surah}/$stash->{page}->{prev}->{first}". ( $stash->{page}->{prev}->{last} == $stash->{page}->{prev}->{first} ? '' : "-$stash->{page}->{prev}->{last}" ) %>/#<% $stash->{page}->{prev}->{last} %>/">
-				<span class="icon left"><b><s class="s1"></s></b></span>
-			</a>
-			<%perl>}</%perl>
-			<%perl>if ($stash->{page}->{next}) {</%perl>
-			<a class="next" href="<% "/$stash->{language}->{language_code}/$stash->{page}->{next}->{surah}/$stash->{page}->{next}->{first}". ( $stash->{page}->{next}->{last} == $stash->{page}->{next}->{first} ? '' : "-$stash->{page}->{next}->{last}" ) %>/#<% $stash->{page}->{next}->{first} %>/">
-				<span class="icon right"><b><s class="s1"></s></b></span>
-			</a>
-			<%perl>}</%perl>
-		</nav>
-	</footer>
-</&>
-<&| /screen/_partial/side.mhtml &>
-	<%perl>
-		print $view->get($c, $m, '/screen/_partial/side/nav.mhtml', {
-			query => $stash->{query}
-		}, {
-			language_code => $stash->{language}->{language_code}
-		});
-	</%perl>
 </&>

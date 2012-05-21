@@ -1,0 +1,35 @@
+<div id="head">
+	<div class="tbar">
+		<div class="network">
+			<a class="label">quran.com network</a>
+			<div class="sites">
+				<%perl>for my $site (@{ $stash->{network} }) {</%perl>
+				<a href="<% $site->{url} %>" title="<% $site->{title} %>" class="site<% $site->{url} eq 'http://quran.com' ? ' current' : '' %>">
+					<% $site->{label} %>
+				</a>
+				<%perl>}</%perl>
+			</div>
+			<a class="more">more</a>
+		</div>
+
+		<%perl>if ($c->account) {</%perl>
+		<div class="account">
+			<a class="name"><% $c->account->name %></a>
+			<a class="lastmark">L</a>
+			<a class="settings">S</a>
+		</div>
+		<%perl>}</%perl>
+	</div>
+
+	<div class="sbox">
+		<div class="centered">
+			<div class="inside">
+				<h1><% $c->request->uri->host %></h1>
+				<input type="search" name="q">
+				<button name="foo"></button>
+				<button name="bar"></button>
+				<button name="baz"></button>
+			</div>
+		</div>
+	</div>
+</div>

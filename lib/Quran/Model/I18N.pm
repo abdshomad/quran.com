@@ -8,7 +8,7 @@ __PACKAGE__->config({
 		installed => { array => [], hash => {} }
 	},
 	path => {
-		independent => [ qw{sign u session favicon.ico profile leaks leak i18n} ],
+		independent => [ qw{sign account session profile i18n favicon.ico} ],
 	},
 	lexicon => {}
 });
@@ -30,8 +30,8 @@ sub language {
 		$language_code = $c->setting('language'); # retrieves from session or user
 		unless ($language_code and $self->{language}->{installed}->{hash}->{ $language_code }) {
 			for (@{ $self->languages($c) }) {
-				if ($self->{language}->{installed}->{hash}->{ $_ }) {
-					$language_code = $_;
+				if ($self->config->{language}->{installed}->{hash}->{ $_->{language_code} }) {
+					$language_code = $_->{language_code};
 					last;
 				}
 			}

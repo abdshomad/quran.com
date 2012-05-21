@@ -45,6 +45,14 @@ __PACKAGE__->has_many('bookmark' => 'Quran::Schema::Account::Bookmark',
 	{ 'foreign.member_id' => 'self.member_id' },
 	{ cascade_copy => 0, cascade_delete => 0 });
 
+__PACKAGE__->has_many('tag' => 'Quran::Schema::Account::Tag',
+	{ 'foreign.member_id' => 'self.member_id' },
+	{ cascade_copy => 0, cascade_delete => 0 });
+
+__PACKAGE__->has_many('share' => 'Quran::Schema::Account::Share',
+	{ 'foreign.member_id' => 'self.member_id' },
+	{ cascade_copy => 0, cascade_delete => 0 });
+
 __PACKAGE__->might_have('lastmark' => 'Quran::Schema::Account::Lastmark',
   { 'foreign.member_id' => 'self.member_id' },
   { cascade_copy => 0, cascade_delete => 0 });

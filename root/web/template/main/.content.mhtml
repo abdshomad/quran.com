@@ -1,0 +1,171 @@
+<%flags>
+	inherit => undef
+</%flags>
+<%perl>
+	my $stash = $c->stash;
+	my $view = $c->controller('View');
+	my $request = $c->request;
+	my $params = $request->params;
+	my $session = $c->session;
+
+	for my $key (@{ $stash->{keys} }) {
+		my $content = $stash->{content}->{ $key };
+		my $page = $content->{page};
+		my ($surah, $ayah) = split /:/, $key, 2;
+</%perl>
+<a class="anchor" id="anchor-<% $surah .'-'. $ayah %>"></a>
+<div class="ayah container" id="ayah-<% $surah .'-'. $ayah %>" data-key="<% $key %>" data-surah="<% $surah %>" data-ayah="<% $ayah %>" data-page="<% $page %>">
+	<header data-key="<% $key %>">
+		<table>
+			<tbody>
+				<tr>
+					<td class="audioPlayer">
+						<ul class="player">
+							<li class="state pre"></li>
+							<li class="sound"><audio preload="auto"></audio></li>
+							<li class="ui" data-key="<% $key %>">
+								<table class="instance init">
+									<tbody>
+										<tr>
+											<td class="play"><div class="wrap">
+												<span class="icon audio play">
+													<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+												</span>
+											</div></td>
+											<td class="track"><div class="wrap"><div class="range"><span class="buffer"></span></div></div></td>
+											<td class="time"><div class="wrap"><span class="elapsed">--:--</span></div></td>
+											<td class="config"><div class="wrap">
+												<span class="icon audio config" title="<% $c->i18n->localize($c, 'Configuration Settings', { context => 'audioPlayer', attribute => 'title' }) %>">
+													<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+												</span>
+												<div class="panel">
+													<ul class="list body">
+														<li class="item volume selected"><div class="range"></div></li>
+													</ul>
+													<ul class="list strip">
+														<li class="item volume selected">
+															<span class="icon audio volume-2">
+																<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+															</span>
+														</li>
+													</ul>
+												</div>
+											</div></td>
+											<td class="reciter"><div class="wrap">
+												<span class="icon audio reciter" title="<% $c->i18n->localize($c, 'Choose Reciter', { context => 'audioPlayer', attribute => 'title' }) %>">
+													<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+												</span>
+												<div class="panel">
+													<ul class="list body"></ul>
+													<ul class="list strip"></ul>
+												</div>
+											</div></td>
+											<td class="loop" title="<% $c->i18n->localize($c, 'Loop Playback', { context => 'audioPlayer', attribute => 'title' }) %>"><div class="wrap">
+												<span class="icon audio loop">
+													<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+												</span>
+											</div></td>
+											<td class="sequence" title="<% $c->i18n->localize($c, 'Sequence Playback', { context => 'audioPlayer', attribute => 'title' }) %>"><div class="wrap">
+												<span class="icon audio sequence">
+													<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+												</span>
+											</div></td>
+											<td class="space"><img src="/static/images/gif/space.gif" alt=""></td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+						</ul>
+					</td>
+					<td class="ayahTools">
+						<div class="wrap">
+							<menu class="account">
+								<li class="share">
+									<span class="icon tools share">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="hidden"><% $c->i18n->localize($c, 'share') %></label>
+								</li>
+								<li class="tags">
+									<span class="icon tools tags">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="hidden"><% $c->i18n->localize($c, 'tags') %></label>
+								</li>
+								<li class="bookmark<% $stash->{account}->{bookmarks}->{ $surah }->{ $ayah } ? ' selected' : '' %>">
+									<span class="icon tools bookmark">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="hidden"><% $c->i18n->localize($c, 'bookmark') %></label>
+								</li>
+								<li class="lastmark<% $stash->{account}->{lastmark}->{key} eq $key ? ' selected' : '' %>">
+									<span class="icon tools lastmark">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="hidden"><% $c->i18n->localize($c, 'lastmark') %></label>
+								</li>
+							</menu>
+						</div>
+					</td>
+					<td class="ayahKey">
+						<div class="wrap">
+							<label class="label"><span class="number"><% $c->i18n->localize($c, $surah, { context => 'number' }) .':'. $c->i18n->localize($c, $ayah, { context => 'number' }) %></span></label>
+						</div>
+					</td>
+					<td class="scrollAnchor" data-key="<% $key %>">
+						<div class="wrap">
+							<span class="icon ayah">
+								<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+							</span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</header>
+	<section class="quran" style="font-size: <% $session->{navMenu}->{textSize}->{quran} ? $session->{navMenu}->{textSize}->{quran} : 100 %>%;" lang="ar" dir="rtl">
+		<div class="content">
+			<%perl>if ($content->{quran}->{text}) {</%perl>
+			<p class="text <% $content->{quran}->{text}->{resource_code} %>"><% $content->{quran}->{text}->{text} %></p>
+			<%perl>} elsif ($content->{quran}->{words}) {</%perl>
+			<p class="words" data-key="<% $key %>"><%perl>
+			for (my $i = 0; $i < scalar @{ $content->{quran}->{words} }; $i++) {
+				my $b = $content->{quran}->{words}->[$i];
+				my $translation = $b->{translation};
+				my $attrs = "class=\"$b->{type} p$b->{page}\" data-glyph-id=\"$b->{glyph_id}\"". ( $b->{type} eq 'word' ? " data-word-id=\"$b->{word_id}\"". ( $translation ? " title=\"$translation\" dir=\"". $stash->{language}->{direction} ."\"" : '' ) : '' );
+				my $space = $b->{type} eq 'word' && $i > 0 ? '<a>&nbsp;</a>' : '';</%perl><% $space %><b <% $attrs %>><% $b->{code} %></b><%perl>}</%perl>
+			</p>
+			<%perl>} elsif ($content->{quran}->{images}) {</%perl>
+			<p class="images"><img src="<% $content->{quran}->{images}->{url} %>" alt="<% $content->{quran}->{images}->{alt} %>" width="<% $content->{quran}->{images}->{width} %>" /></p>
+			<%perl>}</%perl>
+		</div>
+		<nav>
+			<b data-key="<% $key %>" class="changeAyah prev<% not defined $stash->{page}->{prev} and $key eq $stash->{page}->{first} ? ' disabled' : '' %>"><a></a></b>
+			<b data-key="<% $key %>" class="changeAyah next<% not defined $stash->{page}->{next} and $key eq $stash->{page}->{last}  ? ' disabled' : '' %>"><a></a></b>
+		</nav>
+	</section>
+	<%perl>if ($stash->{language}->{language_code} eq 'ar') {</%perl>
+	<section class="tafsir">
+		<h2><% $stash->{utf8}->{tafsir} %></h2>
+		<menu>
+		<%perl>for (@{ $stash->{options}->{resources}->{tafsir} }) {</%perl>
+			<li><a href="/ar/tafsir/<% $_->{resource_code} %>/<% $surah %>/<% $ayah %>" target="tafsir"><% $_->{name} %></a></li>
+		<%perl>}</%perl>
+		</menu>
+	</section>
+	<%perl>} else {</%perl>
+	<section class="resources" style="font-size: <% $session->{navMenu}->{textSize}->{resources} ? $session->{navMenu}->{textSize}->{resources} : 100 %>%;">
+		<table class="content">
+			<tbody>
+			<%perl>for my $resource (@{ $content->{resources} }) {</%perl>
+				<tr id="<% 'resource-'. $resource->{type} .'-'. $resource->{resource_code} .'-'. $surah .'-'. $ayah %>" class="<% $resource->{type} eq $resource->{resource_code} ? $resource->{type} : $resource->{type} .' '. $resource->{resource_code} %>" data-priority="<% $resource->{priority} %>">
+					<th title="<% $resource->{author}->{name} ne 'Unknown' ? $resource->{author}->{name} : $resource->{name} %>"><span><% $resource->{name} %></span></th>
+					<td><p><% $resource->{text} %></p></td>
+				</tr>
+			<%perl>}</%perl>
+			</tbody>
+		</table>
+	</section>
+	<%perl>}</%perl>
+</div>
+<%perl>}</%perl>

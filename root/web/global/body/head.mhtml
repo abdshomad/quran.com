@@ -1,0 +1,45 @@
+<div class="tbar">
+	<div class="wrap">
+		<div class="network">
+			<a class="label">quran.com network</a>
+			<div class="sites">
+				<%perl>
+					for my $site (@{ $stash->{network} }) {
+						my $current = $site->{url} eq 'http://quran.com' ? 1 : 0;
+				</%perl>
+				<a href="<% $site->{url} %>" title="<% $site->{title} %>" class="site<% $current ? ' current' : '' %>">
+					<span><% $site->{label} %><%perl>if ($current) {</%perl><b></b><%perl>}</%perl></span>
+				</a>
+				<%perl>}</%perl>
+			</div>
+			<a class="more">more</a>
+		</div>
+
+		<%perl>if ($c->account) {</%perl>
+		<div class="account">
+			<a class="name"><% $c->account->name %></a>
+			<a class="lastmark">L</a>
+			<a class="settings">S</a>
+		</div>
+		<%perl>}</%perl>
+	</div>
+</div>
+
+<div class="sbox">
+	<div class="wrap">
+		<h1 class="p0">&#1142;</h1>
+		<h2><% $c->request->uri->host %></h2>
+		<div class="search">
+			<button class="tags">1</button>
+			<button class="quran transliteration">2</button>
+			<button class="translation tafsir">3</button>
+			<button class="go to">4</button>
+			<button class="translation">5</button>
+			<button class="tafsir">6</button>
+			<button class="to">7</button>
+			<form method="GET" action="/search/">
+				<input type="text" name="q" placeholder="Search" autocomplete="off" autofocus="autofocus">
+			</form>
+		</div>
+	</div>
+</div>

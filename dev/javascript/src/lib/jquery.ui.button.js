@@ -41,8 +41,6 @@ var lastActive, startXPos, startYPos, clickDragged,
 	};
 
 $.widget( "ui.button", {
-	version: "@VERSION",
-	defaultElement: "<button>",
 	options: {
 		disabled: null,
 		text: true,
@@ -58,7 +56,7 @@ $.widget( "ui.button", {
 			.bind( "reset.button", formResetHandler );
 
 		if ( typeof this.options.disabled !== "boolean" ) {
-			this.options.disabled = this.element.attr( "disabled" );
+			this.options.disabled = this.element.propAttr( "disabled" );
 		}
 
 		this._determineButtonType();
@@ -155,7 +153,7 @@ $.widget( "ui.button", {
 					return false;
 				}
 				$( this ).addClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", true );
+				self.buttonElement.attr( "aria-pressed", "true" );
 
 				var radio = self.element[ 0 ];
 				radioGroup( radio )
@@ -164,7 +162,7 @@ $.widget( "ui.button", {
 						return $( this ).button( "widget" )[ 0 ];
 					})
 					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", false );
+					.attr( "aria-pressed", "false" );
 			});
 		} else {
 			this.buttonElement
@@ -228,8 +226,8 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
-			var ancestor = this.element.parents().last(),
-				labelSelector = "label[for=" + this.element.attr("id") + "]";
+			var ancestor = this.element.parents().filter(":last"),
+				labelSelector = "label[for='" + this.element.attr("id") + "']";
 			this.buttonElement = ancestor.find( labelSelector );
 			if ( !this.buttonElement.length ) {
 				ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
@@ -254,7 +252,7 @@ $.widget( "ui.button", {
 		return this.buttonElement;
 	},
 
-	_destroy: function() {
+	destroy: function() {
 		this.element
 			.removeClass( "ui-helper-hidden-accessible" );
 		this.buttonElement
@@ -266,15 +264,17 @@ $.widget( "ui.button", {
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
 		}
+
+		$.Widget.prototype.destroy.call( this );
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		$.Widget.prototype._setOption.apply( this, arguments );
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element.propAttr( "disabled", true );
 			} else {
-				this.element.removeAttr( "disabled" );
+				this.element.propAttr( "disabled", false );
 			}
 			return;
 		}
@@ -291,22 +291,22 @@ $.widget( "ui.button", {
 				if ( $( this ).is( ":checked" ) ) {
 					$( this ).button( "widget" )
 						.addClass( "ui-state-active" )
-						.attr( "aria-pressed", true );
+						.attr( "aria-pressed", "true" );
 				} else {
 					$( this ).button( "widget" )
 						.removeClass( "ui-state-active" )
-						.attr( "aria-pressed", false );
+						.attr( "aria-pressed", "false" );
 				}
 			});
 		} else if ( this.type === "checkbox" ) {
 			if ( this.element.is( ":checked" ) ) {
 				this.buttonElement
 					.addClass( "ui-state-active" )
-					.attr( "aria-pressed", true );
+					.attr( "aria-pressed", "true" );
 			} else {
 				this.buttonElement
 					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", false );
+					.attr( "aria-pressed", "false" );
 			}
 		}
 	},
@@ -355,8 +355,6 @@ $.widget( "ui.button", {
 	}
 });
 
-$.ui.button.version = "@VERSION";
-
 $.widget( "ui.buttonset", {
 	options: {
 		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
@@ -375,7 +373,7 @@ $.widget( "ui.buttonset", {
 			this.buttons.button( "option", key, value );
 		}
 
-		this._super( "_setOption", key, value );
+		$.Widget.prototype._setOption.apply( this, arguments );
 	},
 	
 	refresh: function() {
@@ -401,7 +399,7 @@ $.widget( "ui.buttonset", {
 			.end();
 	},
 
-	_destroy: function() {
+	destroy: function() {
 		this.element.removeClass( "ui-buttonset" );
 		this.buttons
 			.map(function() {
@@ -410,6 +408,8 @@ $.widget( "ui.buttonset", {
 				.removeClass( "ui-corner-left ui-corner-right" )
 			.end()
 			.button( "destroy" );
+
+		$.Widget.prototype.destroy.call( this );
 	}
 });
 

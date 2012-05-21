@@ -1,14 +1,14 @@
 #!/usr/bin/env perl
 
 # Uncomment below and set to your clone of the app's directory to debug dbic queries
-#BEGIN {
-#	use File::Spec;
-#	use FindBin;
-#	my $dbic_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbic.debug.log');
-#	$ENV{DBIC_TRACE} = "1=$dbic_log_file";
-#	my $dbi_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbi.debug.log');
-#	$ENV{DBI_TRACE} = "1=$dbi_log_file";
-#};
+BEGIN {
+	use File::Spec;
+	use FindBin;
+	my $dbic_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbic.debug.log');
+	$ENV{DBIC_TRACE} = "1=$dbic_log_file";
+	my $dbi_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbi.debug.log');
+	$ENV{DBI_TRACE} = "1=$dbi_log_file";
+};
 
 
 use Catalyst::ScriptRunner;

@@ -4,40 +4,68 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
-=head1 NAME
+sub lookup :Private {
+	my ($self, $c, $surah_id) = @_;
 
-Quran::Controller::Page - Catalyst Controller
+	my ($key, $result) = ("lookup?surah_id=$surah_id");
 
-=head1 DESCRIPTION
+	unless ($result = $c->memcache($key)) {
+		my @page = $c->model('DB::Quran::Page')->search({
+			surah_id => $surah_id
+		}, {
+			order_by => { -asc => 'page_num' },
+			columns => [qw/page_num ayah_num/]
+		});
 
-Catalyst Controller.
+		my @surah = $c->model('DB::Quran::Surah')->search({
+			surah_id => $surah_id
+		}, {
+			columns => ['page_num']
+		});
 
-=head1 METHODS
+		my @ayah = $c->model('DB::Quran::Ayah')->search({
+			surah_id => $surah_id
+		}, {
+			order_by => { -asc => 'ayah_num' },
+			columns => ['page_num']
+		});
 
-=cut
+		$result = {
+			ayah => [ map { $_->get_column('page_num') } @ayah ],
+			page => { map { $_->get_column('page_num') => $_->get_column('ayah_num') } @page },
+			surah => map { $_->get_column('page_num') } @surah,
+		};
 
+		$c->memcache($key, $result);
+	}
 
-=head2 range
-
-=cut
+	return $result;
+}
 
 sub range :Private {
-	my ($self, $c, $params) = (shift, shift, shift);
+	my ($self, $c, $params) = @_;
 
-	my $range;
-	my $key = "range?surah=$params->{surah}&pages=$params->{pages}";
-	my ($where, $order_by);
+	my ($key, $result) = ("range?surah=$params->{surah}&pages=$params->{pages}");
+
 	if ($params->{start}) {
 		$key .= "&start=$params->{start}";
-		$where = { '>=', $params->{start} };
-		$order_by = { -asc => 'me.page_num' };
 	}
 	elsif ($params->{end}) {
 		$key .= "&end=$params->{end}";
-		$where = { '<=', $params->{end} };
-		$order_by = { -desc => 'me.page_num' };
 	}
-	unless ($range = $c->memcache($key)) {
+
+	unless ($result = $c->memcache($key)) {
+		my ($where, $order_by);
+
+		if ($params->{start}) {
+			$where = { '>=', $params->{start} };
+			$order_by = { -asc => 'me.page_num' };
+		}
+		elsif ($params->{end}) {
+			$where = { '<=', $params->{end} };
+			$order_by = { -desc => 'me.page_num' };
+		}
+
 		my @set = $c->model('DB::Quran::Ayah')->search({
 			'me.surah_id' => $params->{surah},
 			'me.ayah_num' => $where
@@ -46,27 +74,25 @@ sub range :Private {
 				      as => ['first', 'last'],
 				group_by => ['me.page_num'],
 				order_by => $order_by,
-				    rows => 2
+				    rows => $params->{pages}
 		});
 		if ($params->{start}) {
-			$range = {
-				surah => $params->{surah},
-				first => $set[0]->get_column('first'),
-				 last => $set[1] ? $set[1]->get_column('last') : $set[0]->get_column('last')
-			};
+			$result = [
+				$set[0]->get_column('first'),
+				$set[1] ? $set[1]->get_column('last') : $set[0]->get_column('last')
+			];
 		}
 		elsif ($params->{end}) {
-			$range = {
-				surah => $params->{surah},
-				first => $set[1] ? $set[1]->get_column('first') : $set[0]->get_column('first'),
-				 last => $set[0]->get_column('last')
-			};
+			$result = [
+					$set[1] ? $set[1]->get_column('first') : $set[0]->get_column('first'),
+					$set[0]->get_column('last')
+			 ];
 		}
 
-		$c->memcache($key, $range);
+		$c->memcache($key, $result);
 	}
 
-	return $range;
+	return $result;
 }
 
 sub from_key :Private {
@@ -96,16 +122,6 @@ sub from_keys :Private {
 
 	return $pages;
 }
-
-=head1 AUTHOR
-
-Nour Sharabash <nour@quran.com>
-
-=head1 LICENSE
-
-Copyright (c) 2011 by Nour Sharabash
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 

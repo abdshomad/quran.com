@@ -1,0 +1,3 @@
+<%perl>for (keys %{ $stash->{fonts} }) {</%perl>
+<style type="text/css" id="<% $_ %>" class="fonts" scoped="scoped"><% $stash->{fonts}->{ $_ } %></style>
+<%perl>}</%perl>

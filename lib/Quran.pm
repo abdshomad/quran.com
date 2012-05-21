@@ -6,10 +6,12 @@ package Quran;
 use Moose;
 use namespace::autoclean;
 
-use Catalyst::Runtime 5.80032;
+use Catalyst::Runtime 5.80;
 
-use Catalyst 5.80032 qw/
-	ConfigLoader
+use Catalyst qw/
+	-Debug
+	ConfigLoader::Multi
+	StackTrace
 	Static::Simple
 	Authentication
 	Authorization::Roles
@@ -17,10 +19,11 @@ use Catalyst 5.80032 qw/
 	Session
 	Session::State::Cookie
 	Unicode::Encoding
+	+Quran::Plugin::Account
 	+Quran::Plugin::I18N
 	+Quran::Plugin::I18N::Language
 	+Quran::Plugin::I18N::Lexicon
-	+Quran::Plugin::I18N::Path
+	+Quran::Plugin::I18N::Host
 	+Quran::Plugin::Config::Roles
 	+Quran::Plugin::UTF8
 	+Quran::Plugin::Session
@@ -31,17 +34,22 @@ use CatalystX::RoleApplicator;
 
 extends 'Catalyst';
 
-__PACKAGE__->apply_request_class_roles ('Catalyst::TraitFor::Request::BrowserDetect');
+__PACKAGE__->apply_request_class_roles qw/Catalyst::TraitFor::Request::BrowserDetect/;
 
-our $VERSION = '1.4320901'; # i.e. target date to production is Ramadan (09), day 1 (01), year 1432 rev. 001
+our $VERSION = '1.4321101.001'; # i.e. target date to production, e.g. Ramadan (09), day 1 (01), year 1432 rev. 001
+
+my $conf = __PACKAGE__->path_to('conf');
+
+system($conf ."/load.pl");
+
+__PACKAGE__->config( name => 'Quran' );
+__PACKAGE__->config('Plugin::ConfigLoader' => { file => $conf });
 
 __PACKAGE__->config(
-	name => 'Quran',
-	encoding => 'UTF-8',
 	'Plugin::Authentication' => {
-		default_realm => 'quran.com',
+		default_realm => 'members',
 		realms => {
-			'quran.com' => {
+			members => {
 				credential => {
 					class => 'Password',
 					password_field => 'password',
@@ -57,8 +65,6 @@ __PACKAGE__->config(
 			}
 		}
 	},
-	default_view => 'Mason',
-	disable_component_resolution_regex_fallback => 1,
 	'Plugin::Cache' => {
 		backends => {
 			default => {
@@ -97,10 +103,8 @@ __PACKAGE__->config(
 
 __PACKAGE__->setup();
 
-__PACKAGE__->config->{paypal} = __PACKAGE__->config->{paypal}->{sandbox} if __PACKAGE__->debug;
-
-# TODO :
-# refactor setting and memcache below into models
+__PACKAGE__->config->{paypal} = __PACKAGE__->config->{paypal}->{sandbox}
+	if __PACKAGE__->debug;
 
 sub setting {
 	my $self = shift;
@@ -123,5 +127,15 @@ sub memcache {
 	}
 	return;
 }
+
+=head1 AUTHOR
+
+Nour Sharabash <nour@quran.com>
+
+=head1 LICENSE
+
+Copyright (c) 2011 by Nour Sharabash
+
+=cut
 
 1;

@@ -1,0 +1,5 @@
+<div id="profile">
+	<h1><% $stash->{account}->{name} %>'s personal profile / blog / landing page at quran.com</h1>
+	<h2>coming soon</h2>
+	<h3>suggestions welcome</h3>
+</div>

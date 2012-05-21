@@ -1,0 +1,49 @@
+<%perl>if ($stash->{static}->{js}) {</%perl>
+<script type="text/javascript">
+	window.console.ie = function() {
+		if (jQuery.browser.msie) {
+			window.console.debug('msie', arguments);
+		}
+	};
+</script>
+<script type="text/javascript" src="http://s0.quran.com/js/libs/jquery-mx.js"></script>
+<script type="text/javascript" src="http://s0.quran.com/js/quran.js"></script>
+<script type="text/javascript">
+	<%perl>if ($stash->{ua} =~ /^mobile-webkit/) {</%perl>
+		jQuery.each(['debug', 'assert', 'dir', 'dirxml', 'group', 'groupEnd', 'groupCollapsed', 'time', 'timeEnd', 'count', 'trace', 'profile', 'profileEnd'], function(i, method) {
+			window.console[method] = window.console.log;
+		});
+	<%perl>}</%perl>
+	console.ie('1');
+	window.q = window.quran = new Quran(<% $stash->{json} ? $stash->{json} : '' %>);
+	console.ie('2');
+	window.quran.run('init', 'window');
+	console.ie('3');
+	window.quran.one('load', function() {
+		return;
+		window._gaq = window._gaq || [];
+		window._gaq.push(['_setAccount', 'UA-24143115-1']);
+		window._gaq.push(['_setDomainName', '<% $c->request->uri->host %>']);
+		window._gaq.push(['_trackPageview']);
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '155032717920714', // App ID
+				channelUrl : 'http://pre-alpha.quran.com/static/channel.html', // Channel File
+				status     : true, // check login status
+				cookie     : true, // enable cookies to allow the server to access the session
+				oauth      : true, // enable OAuth 2.0
+				xfbml      : true, // parse XFBML
+				frictionlessRequests: true
+			});
+		};
+
+		var script = jQuery('<script type="text/javascript" async>');
+
+		jQuery('body').prepend('<div id="fb-root">');
+		jQuery('head')
+			.append(script.clone().attr('src', ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'))
+			.append(script.clone().attr('src', '//connect.facebook.net/en_US/all.js'));
+	}, 1, 'apis');
+	console.ie('4');
+</script>
+<%perl>}</%perl>

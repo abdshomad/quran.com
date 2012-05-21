@@ -1,0 +1,1 @@
+/home/nour/code/quran.com/dev/javascript/dist/jquery-mx.js

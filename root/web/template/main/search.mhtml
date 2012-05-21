@@ -1,0 +1,131 @@
+<div class="ui-foo search" dir="<% $dir %>">
+	<table class="ui-span x y ui-foo-input">
+		<tbody class="ui-span y">
+			<tr class="ui-span y">
+				<td class="ui-span y">
+					<div class="ui-span y input-filters-wrap">
+						<ul class="input-filters" dir="<% $dir %>"><li class="input-filter"><span>filter1</span><a><span>x</span></a></li><li class="input-filter"><span>filter2</span><a><span>x</span></a></li><li class="input-filter"><span>filter3</span><a><span>x</span></a></li><li class="input-filter"><span>filter4</span><a><span>x</span></a></li></ul>
+					</div>
+				</td>
+				<td class="ui-span x y">
+					<div class="ui-span y">
+						<table class="ui-span x y">
+							<tbody class="ui-span y">
+								<tr class="ui-span y">
+									<td class="ui-span y">
+										<div class="ui-span y">
+											<a class="input-clear"><span>x</span></a>
+										</div>
+									</td>
+									<td class="ui-span x y">
+										<div class="ui-span y">
+											<input class="input-field ui-span x y b" type="text" placeholder="search" />
+										</div>
+									</td>
+									<td class="ui-span y">
+										<div class="ui-span y input-menu">
+											<span class="ui-hide ui-menu-tip input-menu-tip">menu</span>
+											<span class="input-menu-buttons">
+												<a class="input-menu-action">
+													<span>a</span>
+												</a>
+												<a class="input-menu-open">
+													<span>o</span>
+												</a>
+											</span>
+											<div class="ui-menu-wrap input-menu-wrap" dir="<% $dir %>">
+													<ul class="ui-menu-list input-menu-list" dir="<% $dir %>">
+														<li class="input-menu-item">
+															<a>
+																<span>item</span>
+																<span>i</span>
+															</a>
+														</li>
+													</ul>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- inline style: set height from 100% to 500% using min(500, n_results * 100) height = 100 * n_results % -->
+	<div class="ui-foo-results ui-hide" style="height: 500%;">
+		<table class="ui-span x y">
+			<tbody class="ui-span y">
+				<tr class="ui-span y">
+					<td class="ui-foo-results-back ui-button ui-span y">
+						<a><span>b</span></a>
+					</td>
+					<td class="ui-foo-results-cell ui-span x y">
+						<div class="ui-foo-results-wrap ui-span x y">
+							<div class="ui-vscroll-btn up">u</div>
+							<div class="ui-vscroll-btn down">d</div>
+							<div class="ui-foo-results-panel closed ui-vscroll-div" dir="<% $dir %>">
+								<ul class="ui-foo-results-list">
+									<li class="ui-foo-results-item"><a><span>base 1</span></a></li>
+									<li class="ui-foo-results-item"><a><span>base 2</span></a></li>
+									<li class="ui-foo-results-item">
+										<table>
+											<tbody>
+												<tr>
+													<td class="ui-span x">
+														<a class="ui-foo-results-item-btn">
+															<table>
+																<tbody>
+																	<tr>
+																		<td>item icon</td>
+																		<td class="ui-span x">item label</td>
+																		<td>right text</td>
+																		<td>right icon</td>
+																	</tr>
+																</tbody>
+															</table>
+														</a>
+													</td>
+													<td>
+														<a class="ui-foo-results-item-btn">
+															<span>
+																open submenu
+															</span>
+														</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</li>
+								</ul>
+							</div>
+							<div class="ui-foo-results-panel closed ui-vscroll-div" dir="<% $dir %>">
+								<ul class="ui-foo-results-list">
+									<li class="ui-foo-results-item"><a><span>sub open 1</span></a></li>
+									<li class="ui-foo-results-item"><a><span>sub open 2</span></a></li>
+								</ul>
+							</div>
+							<div class="ui-foo-results-panel open ui-vscroll-div" dir="<% $dir %>">
+								<ul class="ui-foo-results-list">
+									<li class="ui-foo-results-item"><a><span>result 1</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 2</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 3</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 4</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 5</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 6</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 7</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 8</span></a></li>
+									<li class="ui-foo-results-item"><a><span>result 9</span></a></li>
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="search-submit" dir="<% $dir %>">
+	<a><span>s</span></a>
+</div>

@@ -58,6 +58,8 @@ $.extend( $.ui, {
 
 // plugins
 $.fn.extend({
+	propAttr: $.fn.prop || $.fn.attr,
+
 	_focus: $.fn.focus,
 	focus: function( delay, fn ) {
 		return typeof delay === "number" ?
@@ -141,12 +143,12 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 
 	function reduce( elem, size, border, margin ) {
 		$.each( side, function() {
-			size -= parseFloat( $.curCSS( elem, "padding" + this, true ) ) || 0;
+			size -= parseFloat( $.curCSS( elem, "padding" + this, true) ) || 0;
 			if ( border ) {
-				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true ) ) || 0;
+				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true) ) || 0;
 			}
 			if ( margin ) {
-				size -= parseFloat( $.curCSS( elem, "margin" + this, true ) ) || 0;
+				size -= parseFloat( $.curCSS( elem, "margin" + this, true) ) || 0;
 			}
 		});
 		return size;
@@ -267,7 +269,12 @@ $.extend( $.ui, {
 		}
 	},
 	
-	contains: $.contains,
+	// will be deprecated when we switch to jQuery 1.4 - use jQuery.contains()
+	contains: function( a, b ) {
+		return document.compareDocumentPosition ?
+			a.compareDocumentPosition( b ) & 16 :
+			a !== b && a.contains( b );
+	},
 	
 	// only used by resizable
 	hasScroll: function( el, a ) {

@@ -1,0 +1,205 @@
+NOTE - EMAIL ME FOR HELP !
+    Please email me ( at nour@quran.com ) if you intend to follow these
+		instructions to setup a local development environment on your system. This is
+		my first time writing installation instructions, so forgive me if anything
+		lacks clarity. Assuming you send me a quick email before you start, then
+		insha'Allah I'll be ready to answer any questions that come up, walk you
+		through any steps, or even walk you through the entire process. I want
+    collaboration, so I will insha'Allah be very eager to help.
+
+REQUIREMENTS (PRE-REQUISITE)
+	Perl, Memcache, Linux or MacOS
+
+INSTALL
+ 0. Make a temporary directory and cd into it, let's call it 'INSTALL'
+    $ mkdir INSTALL
+    $ cd INSTALL
+ 1. Clone the repository & download and extract the database
+    $ git clone git@github.com:quran/quran.com-beta.git
+		$ cd quran.com-beta
+    $ curl -O http://beta.quran.com/static/dev/db.tar.bz2
+		$ tar -xjvf db.tar.bz2
+    Note: insha'Allah I will put the database under a versioning system for
+		change management in the future, akin to RoR db migrations
+ 2. Install PostgreSQL 9.0.3 from source. Alternatively, you can install
+    PostgreSQL using your distribution's package manager, however, you will need
+    to have the source tree/directory available and configured properly for your
+		system i.e. if your distribution used ./configure --prefix=/usr
+		--other-prefix=/other/dir --etc then you will need to extract the PostgreSQL
+		source and re-run this configure command exactly as your distribution did.
+		This is needed for some upcoming steps involving compilation and installation
+		of contrib modules, some of which I have customized and do not come with
+		PostgreSQL, and this is why I suggest we just install from source, which I
+		will describe by example now:
+		$ cd ..
+    $ curl -O curl -O http://ftp9.us.postgresql.org/pub/mirrors/postgresql/source/v9.0.3/postgresql-9.0.3.tar.bz2
+    $ bunzip2 postgresql-9.0.3.tar.bz2
+    $ tar -xvf postgresql-9.0.3.tar
+    $ rm postgresql-9.0.3.tar
+    $ cd postgresql-9.0.3
+    $ ./configure --with-perl
+    -   Note: if configure returns an error 'readline library not found',
+		          then install readline:
+    -   $ apt-get install libreadline6-dev
+    $ make
+    -  Note: if make returns an error '/usr/bin/ld: cannot find -lperl',
+		         then install libperl-dev
+    -  $ apt-get install libperl-dev
+    $ sudo make install
+    $ sudo adduser postgres
+    $ sudo mkdir /usr/local/pgsql/data
+    $ sudo chown postgres /usr/local/pgsql/data
+    $ su - postgres
+    $ export LANG="en_US.utf8"
+    $ export LC_CTYPE="en_US.utf8"
+    $ export LC_NUMERIC="en_US.utf8"
+    $ export LC_TIME="en_US.utf8"
+    $ export LC_COLLATE="en_US.utf8"
+    $ export LC_MONETARY="en_US.utf8"
+    $ export LC_MESSAGES="en_US.utf8"
+    $ export LC_PAPER="en_US.utf8"
+    $ export LC_NAME="en_US.utf8"
+    $ export LC_ADDRESS="en_US.utf8"
+    $ export LC_TELEPHONE="en_US.utf8"
+    $ export LC_MEASUREMENT="en_US.utf8"
+    $ export LC_IDENTIFICATION="en_US.utf8"
+    $ /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+ 3. Start server
+    - Optionally create an /etc/init.d script (see ATTACHMENT #1) or manually
+      start and stop the server like so:
+      - to start:
+      $ su -l postgres -c "env PGDATA=\"/usr/local/pgsql/data\" PGPORT=\"5432\" /usr/local/pgsql/bin/pg_ctl start -s -w -t 60"
+      - to stop:
+      $ su -l postgres -c "env PGDATA=\"/usr/local/pgsql/data\" PGPORT=\"5432\" /usr/local/pgsql/bin/pg_ctl stop -s -w -t 60"
+ 4. Add the pgsql bin directory to your PATH
+    $ export PATH="$PATH:/usr/local/pgsql/bin"
+    or
+    $ echo 'export PATH="$PATH:/usr/local/pgsql/bin"' >> .bashrc
+    $ echo 'export PATH="$PATH:/usr/local/pgsql/bin"' >> .bash_profile
+ 5. Compile and install a few specific PostgreSQL modules existing in the
+    PostgreSQL source tree's 'contrib' directory:
+    $ cd contrib/fuzzystrmatch
+    $ make
+    $ sudo make install
+    $ cd ../dict_xsyn
+    $ make
+    $ sudo make install
+    $ cd ../pg_trgm
+    $ cp ../../../quran.com-beta/db/postgresql-9.0.3/contrib/pg_trgm/trgm.h .
+    $ make
+    $ sudo make install
+    $ cd ..
+    $ cp -R ../../quran.com-beta/db/postgresql-9.0.3/contrib/parse_buckwalter/ .
+    $ cd parse_buckwalterg
+    $ make
+    $ sudo make install
+    $ cd ..
+    $ cp -R ../../quran.com-beta/db/postgresql-9.0.3/contrib/dict_buckwalter/ .
+    $ cd dict_buckwalter
+    $ make
+    $ sudo make install
+    $ cd /usr/local/pgsql/share/contrib/
+    $ psql -U postgres -f fuzzystrmatch.sql
+    $ psql -U postgres -f dict_xsyn.sql
+    $ psql -U postgres -f pg_trgm.sql
+    $ psql -U postgres -f parse_buckwalter.sql
+    $ psql -U postgres -f dict_buckwalter.sql
+    $ cd ../tsearch_data
+    $ sudo cp ~/INSTALL/quran.com-beta/db/postgresql-9.0.3/share/tsearch_data/* .
+ 6. Connect to the database server as the 'postgres' superuser, and create the
+    'quran' user and database
+    $ psql -U postgres template1
+    postgres=# CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
+    postgres=# CREATE USER quran WITH PASSWORD 'quran';
+    postgres=# CREATE DATABASE quran OWNER quran;
+    postgres=# GRANT ALL PRIVILEGES ON DATABASE quran TO quran;
+    postgres=# \q
+ 7. Import the database:
+    $ psql -U postgres -f ~/INSTALL/quran.com-beta/db/pg_dump/db.sql quran
+ 8. Connect to the quran database and set the search_path
+    $ psql -U quran
+    quran=> ALTER DATABASE quran SET search_path = quran, translation, transliteration, network, search, corpus, complex, content, i18n, users, audio, "$user", public;
+    quran=> SET search_path = quran, translation, transliteration, network, search, corpus, complex, content, i18n, users, audio, "$user", public;
+    quran=> \q
+ 9. Database setup is now complete. Let's move on to Perl and installing the
+    required modules from CPAN. Assuming you already have Perl and CPAN
+		installed, do this:
+    $ cd ~/INSTALL/quran.com-beta/
+    $ sudo -s
+    # export PERL_MM_USE_DEFAULT=1
+    # cpan
+    cpan[1]> o conf prerequisites_policy 'follow'
+    cpan[2]> install inc::Module::Install
+    cpan[3]> install Module::Install::Catalyst
+    cpan[4]> quit
+    # perl Makefile.pl
+    # make
+    - Note: this should automatically install dependencies but if something
+		        doesn't build (not entirely unlikely) try to find out why and then
+						retry the install. For example, after running make, run:
+      $ perl Makefile.PL | grep missing
+      If any modules are missing, try poking around to see why, e.g.:
+      $ cd ~/.cpan/build/Module-Name-asdf123
+      $ perl Makefile.PL
+      Warning: prerequisite Module::Build 0.3601 not found. We have 0.340201.
+      - Thus we know where the problem is, and thus we would quit out of cpan,
+			  enter it again, run 'install Module::Build', and try again, also, if all
+				else fails, one can always 'force install Module'
+10. After successfully installing all the required Perl modules, let's do some
+    cleanup (we're still in the ~/INSTALL/quran.com-beta directory):
+    # make realclean
+11. "Compile" Javascript
+    $ cd ./dev/javascript
+    $ make
+12. Test if the application works by running the development server:
+    # exit
+    $ ./script/quran_server.pl
+13. If it seems to work, you're done. Navigate to http://localhost:3000 and
+    start testing/developing.
+
+
+ATTACHMENT #1
+ Description - An /etc/init.d/ PostgreSQL startup script (tested on Ubuntu)
+ Filename    - /etc/init.d/postgresql
+
+BEGIN ATTACHMENT #1
+
+#!/bin/sh
+# PostgreSQL this is the init script for starting and stopping the PostgreSQL server
+
+# chkconfig 345 85 15
+# description: PostgreSQL
+# processname: postmaster
+# pidfile: /var/run/postmaster.pid
+#
+
+start() {
+echo -n "Starting PostgreSQL: "
+su -l postgres -c "env PGDATA=\"/usr/local/pgsql/data\" PGPORT=\"5432\" /usr/local/pgsql/bin/pg_ctl start -s -o '--silent-mode=true' -w -t 60"
+echo "done."
+}
+
+stop() {
+echo -n "Shutting down PostgreSQL: "
+su -l postgres -c "env PGDATA=\"/usr/local/pgsql/data\" PGPORT=\"5432\" /usr/local/pgsql/bin/pg_ctl stop -s -o '--silent-mode=true' -w -t 60"
+echo "done."
+}
+
+case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+stop
+sleep 10
+start
+;;
+*)
+echo "Usage: $0 {start|stop|restart}"
+esac
+exit 0
+
+END ATTACHMENT #1

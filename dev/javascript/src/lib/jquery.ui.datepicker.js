@@ -625,6 +625,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker for a given input field.
+       If false returned from beforeShow event handler do not show. 
 	   @param  input  element - the input field attached to the date picker or
 	                  event - if triggered by focus */
 	_showDatepicker: function(input) {
@@ -641,7 +642,12 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._curInst.dpDiv.stop(true, true);
 		}
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
-		extendRemove(inst.settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
+		var beforeShowSettings = beforeShow ? beforeShow.apply(input, [input, inst]) : {};
+		if(beforeShowSettings === false){
+            //false
+			return;
+		}
+		extendRemove(inst.settings, beforeShowSettings);
 		inst.lastVal = null;
 		$.datepicker._lastInput = input;
 		$.datepicker._setDateFromField(inst);
@@ -686,9 +692,7 @@ $.extend(Datepicker.prototype, {
 			};
 			inst.dpDiv.zIndex($(input).zIndex()+1);
 			$.datepicker._datepickerShowing = true;
-
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ($.effects && $.effects[showAnim])
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
@@ -805,9 +809,7 @@ $.extend(Datepicker.prototype, {
 				$.datepicker._tidyDialog(inst);
 				this._curInst = null;
 			};
-
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ($.effects && $.effects[showAnim])
 				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
@@ -882,24 +884,11 @@ $.extend(Datepicker.prototype, {
 	_selectMonthYear: function(id, select, period) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		inst._selectingMonthYear = false;
 		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
 		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
 			parseInt(select.options[select.selectedIndex].value,10);
 		this._notifyChange(inst);
 		this._adjustDate(target);
-	},
-
-	/* Restore input focus after not changing month/year. */
-	_clickMonthYear: function(id) {
-		var target = $(id);
-		var inst = this._getInst(target[0]);
-		if (inst.input && inst._selectingMonthYear) {
-			setTimeout(function() {
-				inst.input.focus();
-			}, 0);
-		}
-		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
 
 	/* Action for selecting a day. */
@@ -941,7 +930,8 @@ $.extend(Datepicker.prototype, {
 		else {
 			this._hideDatepicker();
 			this._lastInput = inst.input[0];
-			inst.input.focus(); // restore focus
+			if (typeof(inst.input[0]) != 'object')
+				inst.input.focus(); // restore focus
 			this._lastInput = null;
 		}
 	},
@@ -1104,10 +1094,7 @@ $.extend(Datepicker.prototype, {
 				}
 		}
 		if (iValue < value.length){
-			var extra = value.substr(iValue);
-			if (!/^\s+/.test(extra)) {
-				throw "Extra/unparsed characters found in date: " + extra;
-			}
+			throw "Extra/unparsed characters found in date: " + value.substring(iValue);
 		}
 		if (year == -1)
 			year = new Date().getFullYear();
@@ -1404,14 +1391,6 @@ $.extend(Datepicker.prototype, {
 		if (inst.input) {
 			inst.input.val(clear ? '' : this._formatDate(inst));
 		}
-
-		var onSelect = this._get(inst, 'onSelect');
-		if (onSelect) {
-			var dateStr = this._formatDate(inst);
-
-			// trigger custom callback
-			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
-		}
 	},
 
 	/* Retrieve the date(s) directly. */
@@ -1610,7 +1589,6 @@ $.extend(Datepicker.prototype, {
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
 			monthHtml += '<select class="ui-datepicker-month" ' +
 				'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
-				'onclick="DP_jQuery_' + dpuuid + '.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
 			 	'>';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
@@ -1644,7 +1622,6 @@ $.extend(Datepicker.prototype, {
 				endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
 				inst.yearshtml += '<select class="ui-datepicker-year" ' +
 					'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
-					'onclick="DP_jQuery_' + dpuuid + '.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
 					'>';
 				for (; year <= endYear; year++) {
 					inst.yearshtml += '<option value="' + year + '"' +
@@ -1766,18 +1743,23 @@ $.extend(Datepicker.prototype, {
  */ 
 function bindHover(dpDiv) {
 	var selector = 'button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a';
-	return dpDiv.delegate(selector, 'mouseout', function() {
-			$(this).removeClass('ui-state-hover');
-			if (this.className.indexOf('ui-datepicker-prev') != -1) $(this).removeClass('ui-datepicker-prev-hover');
-			if (this.className.indexOf('ui-datepicker-next') != -1) $(this).removeClass('ui-datepicker-next-hover');
-		})
-		.delegate(selector, 'mouseover', function(){
-			if (!$.datepicker._isDisabledDatepicker( instActive.inline ? dpDiv.parent()[0] : instActive.input[0])) {
-				$(this).parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
-				$(this).addClass('ui-state-hover');
-				if (this.className.indexOf('ui-datepicker-prev') != -1) $(this).addClass('ui-datepicker-prev-hover');
-				if (this.className.indexOf('ui-datepicker-next') != -1) $(this).addClass('ui-datepicker-next-hover');
+	return dpDiv.bind('mouseout', function(event) {
+			var elem = $( event.target ).closest( selector );
+			if ( !elem.length ) {
+				return;
 			}
+			elem.removeClass( "ui-state-hover ui-datepicker-prev-hover ui-datepicker-next-hover" );
+		})
+		.bind('mouseover', function(event) {
+			var elem = $( event.target ).closest( selector );
+			if ($.datepicker._isDisabledDatepicker( instActive.inline ? dpDiv.parent()[0] : instActive.input[0]) ||
+					!elem.length ) {
+				return;
+			}
+			elem.parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
+			elem.addClass('ui-state-hover');
+			if (elem.hasClass('ui-datepicker-prev')) elem.addClass('ui-datepicker-prev-hover');
+			if (elem.hasClass('ui-datepicker-next')) elem.addClass('ui-datepicker-next-hover');
 		});
 }
 

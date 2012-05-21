@@ -1,54 +1,74 @@
 Quran.prototype =  {
-	ui: { head: {}, body: {}, content: {}, side : {}, widget: {} },
-	_devel: true,
-	_cache: {},
-	_bind: {},
+	ui: { window: {}, head: {}, body: {}, content: {}, side : {}, widget: {} },
 	_data: {},
-	_page: {},
-	_state: { context: '/' },
-	_onchange: {},
-	bind: function(ev, fn) {
-		if (!this._bind[ev])
-			this._bind[ev] = [];
-		this._bind[ev].push(fn);
+	on: function(ev, fn, pr, id) {
+		var self = this,
+			on = self.data('on') || self.data('on', {}),
+			pr = typeof pr == 'number' ? pr : 100;
+
+		if (!on[ev])
+			on[ev] = {};
+
+		if (!on[ev][pr])
+			on[ev][pr] = [];
+
+		if (id)
+			fn.id = id;
+
+		on[ev][pr].push(fn);
+
+		on[ev] = jQuery.sort(on[ev]);
 	},
-	trigger: function(ev, data) {
-		if (this._bind[ev])
-			for (var i=0; i < this._bind[ev].length; i++)
-				this._bind[ev][i].call(this, data)
+	one: function(ev, fn, pr, id) {
+		var self = this,
+			pr = typeof pr == 'number' ? pr : 100;
+
+		fn.one = true;
+
+		self.on(ev, fn, pr, id);
 	},
-	template: function(str, data, id) {
-		var self = this;
+	run: function() {
+		var self = this,
+			on = self.data('on') || self.data('on', {}),
+			args = jQuery.makeArray(arguments),
+			ev = args.shift();
 
-		if (data && typeof(data) == 'string') {
-			id = data;
-			data = {};
-		} else data = data || {};
+		var debug_id;
 
-		if (id && self._cache[id])
-			return self._cache[id];
+		if (typeof args[args.length - 1] == 'string')
+			debug_id = args[args.length - 1];
+		else debug_id = 'unknown';
 
-		var fn = new Function(
-			"obj",
-			"var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('" +
-				jQuery.trim(str
-					.replace(/[\r\t\n]/g, " ")
-					.split("<%").join("\t")
-					.replace(/((^|%>)[^\t]*)'/g, "$1\r")
-					.replace(/\t=(.*?)%>/g, "',$1,'")
-					.split("\t").join("');")
-					.split("%>").join("p.push('")
-					.split("\r").join("\\'")
-					.replace(/>[\s]{2,}</g,'><')
-					.replace(/[\s]{2,}/g, ' ')) +
-			"');}return p.join('');"
-		);
+		console.groupCollapsed('(in)', debug_id, '=>', '(run)', ev, args);
 
-		var r = fn(data);
+		if (on[ev])
+			for (var pr in on[ev]) {
+				var length = on[ev][pr].length;
+				for (var i = 0; i < length; i++) {
+					if (on[ev][pr][i].id)
+						debug_id = on[ev][pr][i].id;
+					else debug_id = 'unknown';
 
-		if (id) self._cache[id] = r;
+					console.time('(in) '+ debug_id +' => (on) '+ ev);
+					/*console.debug('(in)', debug_id, '=>', '(on)', ev, args);*/
 
-		return r;
+					on[ev][pr][i].apply(self, args);
+					console.timeEnd('(in) '+ debug_id +' => (on) '+ ev);
+				}
+
+				for (var i = 0; i < length; i++)
+					if (on[ev][pr][i].one)
+						delete on[ev][pr][i];
+
+				on[ev][pr] = jQuery.grep(on[ev][pr], function(value, index) {
+					return value !== undefined;
+				});
+			}
+
+		console.groupEnd();
+	},
+	notify: function(msg) {
+		console.warn(msg);
 	},
 	localize: function(key) {
 		var self = this;
@@ -68,7 +88,7 @@ Quran.prototype =  {
 		}
 		return self.data('lexicon')[key];
 	},
-	_copy: function(object_or_array) {
+	copy: function(object_or_array) {
 		var copy;
 		if (typeof(object_or_array) == 'object')
 			if (object_or_array.length !== undefined)
@@ -92,13 +112,16 @@ Quran.prototype =  {
 			} else
 			if (typeof thing == 'object') {
 				var new_thing;
-				if (thing.length !== undefined)
+
+				if (thing === null)
+					new_thing = null;
+				else if (thing.length !== undefined)
 					new_thing = [];
-				else
-					new_thing = {};
-				for (var key in thing) {
+				else new_thing = {};
+
+				for (var key in thing)
 					new_thing[key] = get_copy(thing[key]);
-				}
+
 				return new_thing;
 			}
 		};
@@ -121,40 +144,93 @@ Quran.prototype =  {
 				});
 				ref[keys.pop()] = val;
 			}
-			else
-				this._data[key] = val;
+			else this._data[key] = val;
 			return val;
 		}
 		else if (key === undefined)
 			return this._data;
 		else if (val === undefined && typeof(key) == 'object')
 			return jQuery.extend(this._data, key);
-		else if (val === undefined && typeof(key) == 'string' && this._data[key])
-			return this._data[key];
-		else {
-			var data;
-			try {
-				data = eval('this._data.'+ key);
-			} catch(e) {}
-			if (data)
-				return data;
-			else
-				return;
+		else if (val === undefined && typeof(key) == 'string') {
+			if (this._data[key])
+				return this._data[key];
+			else if (/^[^.]+\./.test(key)) {
+				var data;
+				try { data = eval('this._data.'+ key); } catch(e) {}
+				if (data)
+					return data;
+				else return this._data[key];
+			}
 		}
+		else return this._data[key];
+	},
+	cached: function(data) {
+		var self = this,
+			content = self.data('content') || self.data('content', {}),
+			session = self.data('session');
+
+		if (!data) {
+			data = {};
+
+			var copy = function() {};
+			copy.prototype = self.copy(session.content);
+
+			if (copy.prototype.quran.text) {
+				var resource_code = copy.prototype.quran.text;
+				copy.prototype.quran.text = {};
+				copy.prototype.quran.text[resource_code] = 1;
+			}
+
+			jQuery.each(self.data('keys'), function(index, key) {
+				if (content.cached && content.cached[key])
+					return;
+
+				data[key] = new copy;
+			});
+		}
+
+		if (!content.cached)
+			content.cached = data;
+		else self.extend(content.cached, data);
+
+		return content.cached;
+	},
+	extend: function(data, extend) {
+		var self = this;
+
+		for (var key in extend) {
+			if ((data[key] !== undefined && typeof data[key] == 'object' && !data[key].length && data[key] !== null) &&
+				(extend[key] !== undefined && typeof extend[key] == 'object' && !extend[key].length && extend[key] !== null)) {
+				var dataRef = data[key], extendRef = extend[key];
+				self.extend(dataRef, extendRef);
+			}
+			else data[key] = extend[key];
+		}
+
+		return data;
 	},
 	ajax: function(url, params, options) {
 		var self = this,
-			options = jQuery.extend({ type: 'POST' }, options, { url: url, contentType: 'application/json', data: JSON.stringify(params) });
+			ajax = self.data('ajax') || self.data('ajax', {}),
+			params = typeof params == 'object' && params !== null ? params : {},
+			options = jQuery.extend({ type: 'POST' }, options, {
+				url: url, contentType: 'text/javascript', dataType: 'json', data: JSON.stringify(params),
+				complete: function() {
+					delete ajax[url];
+				}
+			});
 
-		if (self._ajax[url] === undefined)
-			self._ajax[url] = jQuery.ajax(options);
-		else {
-			if (options.abort)
-				self._ajax[url].abort();
-			self._ajax[url] = jQuery.ajax(options);
+		if (ajax[url] && ajax[url].readyState < 4) {
+			if (options.wait)
+				return ajax[url];
+			else if (options.abort)
+				ajax[url].abort();
 		}
+
+		ajax[url] = jQuery.ajax(options);
+
+		return ajax[url];
 	},
-	_ajax: {},
 	session: function() {
 		var self = this,
 			argument = arguments;
@@ -172,12 +248,16 @@ Quran.prototype =  {
 				}
 			}
 			else {// set
-				jQuery.extend(self.data('session'), argument[0]); // extend with object
+				if (argument[0].content && argument[0].content.quran)
+					self.data('session.content.quran', {});
+				quran.extend(self.data('session'), argument[0]); // extend with object
 				self.ajax('/session', { session: argument[0] }, { abort: true }); // save
 			}
 		}
 		else { // set
-			jQuery.extend(self.data('session'), argument[0]); // extend with object
+			if (argument[0].content && argument[0].content.quran)
+				self.data('session.content.quran', {});
+			quran.extend(self.data('session'), argument[0]); // extend with object
 
 			var params = jQuery.extend({ session: argument[0] }, argument[1]),
 				options = argument[2] || {},
@@ -188,20 +268,20 @@ Quran.prototype =  {
 			self.ajax(url, params, options) // save with possible callback
 		}
 	},
-	state: function(state, val) {
+	state: function(state, val) { // deprecated ?
 		var self = this,
-			part;
+			data = self.data('state');
 
 		if (state !== undefined && typeof(state) == 'object')
-			jQuery.extend(self._state, state);
+			jQuery.extend(data, state);
 		else if (state !== undefined && typeof(state) == 'string' && val !== undefined)
-			self._state[state] = val;
+			data[state] = val;
 		else if (state !== undefined && typeof(state) == 'string' && val === undefined)
-			return self._state[state];
+			return data[state];
 
-		return self._copy(self._state);
+		return self.copy(data);
 	},
-	page: function(key) {
+	page: function(key) { // deprecated
 		var self = this,
 			key = 'page' + (key ? '.'+ key : '');
 
@@ -217,32 +297,41 @@ Quran.prototype =  {
 	 *   quran.change({ ayah: 'next', cycle: true }); // change to next ayah but return to the first ayah on that page if the next ayah is out of the page's scope
 	 *   anchor: boolean // TODO changes ayah with scrolling/anchoring to respective ayah number
 	 */
-	change: function(params, owner) {
+	change: function(params, from) {
 		var self = this,
 			params = jQuery.extend({}, params),
 			href = window.location.href.replace(/#.*$/,''),
 			hash = window.location.hash.replace(/^#/,''),
 			keys = self.data('keys'),
-			state = self.state(),
-			view = self.data('class'),
-			change = { key : params.key ? params.key : state.key },
+			prior = self.state(),
+			view = self.data('view'),
+			change = { key : params.key ? params.key : prior.key },
 			index = jQuery.inArray(change.key, keys),
 			part = change.key.split(/:/),
 			match = hash.match(/^[^\/]+(\/.*)?$/),
-			range, url, result;
+			last = quran.data('last') || quran.data('last', {}),
+			range, url, state;
 
-
-		if (owner == 'Quran' || params.force || params.next || params.prev || change.key != state.key || params.context && params.context != self.state('context')) {
+		if (params.force || params.next || params.prev || change.key != prior.key || params.context && params.context != self.state('context')) {
 			if (params.context)
 				change.context = params.context;
 			else if (match && match[2])
 				change.context = match[2];
-			else change.context = state.context;
+			else change.context = prior.context;
 
 			change.context = '/'+ jQuery.map(change.context.split('/'), function(a) { return a ? a : null; }).join('/');
 
 			if (index == -1) {
-				change.key = state.key;
+				var split = change.key.split(/:/),
+					surah = parseInt(split[0]),
+					ayah = parseInt(split[1]),
+					ayahs = self.data('surahs['+ (surah - 1) +'].ayahs'),
+					valid = view == 'main' && surah == self.data('page.surah') && ayah >= 1 && ayah <= ayahs;
+				if (valid) {
+					if (from == 'load')
+						return;
+					else return self.load({ key: change.key, change: jQuery.extend(params, change) }, 'change');
+				} else change.key = prior.key;
 			} else
 			if (params.next) {
 				if (keys[index + 1]) {
@@ -250,7 +339,7 @@ Quran.prototype =  {
 				} else
 				if (params.cycle) {
 					change.key = keys[0];
-				} else
+				}/* else
 				if (view == 'main' && change.key == self.page('last') && self.page('next')) {
 					if (self.page('next').first != self.page('next').last)
 						range = self.page('next').first +'-'+ self.page('next').last;
@@ -260,12 +349,12 @@ Quran.prototype =  {
 
 					window.location.assign(url);
 					return;
-				}
+				}*/
 			} else
 			if (params.prev) {
 				if (keys[index - 1]) {
 					change.key = keys[index - 1];
-				} else
+				}/* else
 				if (view == 'main' && change.key == self.page('first') && self.page('prev')) {
 					if (self.page('prev').first != self.page('prev').last)
 						range = self.page('prev').first +'-'+ self.page('prev').last;
@@ -275,52 +364,151 @@ Quran.prototype =  {
 
 					window.location.assign(url);
 					return;
-				}
+				}*/
 			}
 
 			change.index = jQuery.inArray(change.key, keys);
 		} else return;
 
-		result = self.state(change);
+		state = self.state(change);
 
-		window.location.replace(href +'#'+ (view == 'main' ? result.key.split(/:/)[1] : result.key) + result.context);
+		window.location.replace(href +'#'+ (view == 'main' ? state.key.split(/:/)[1] : state.key) + state.context);
 
-		if (params.anchor) {
-			if ((view == 'main' && !self.page('prev') && change.index == 0) || (view == 'search' && change.index == 0))
-				self.window.scrollTop(0);
-			else self.window.scrollTop(Math.round(jQuery('#anchor-'+ (change.key.split(/:/).join('-'))).offset().top));
+		if (index >= 0) {
+			if (params.anchor) {
+				if (change.index == 0)
+					self.window.scrollTop(0);
+				else self.window.scrollTop(Math.round(jQuery('#anchor-'+ (change.key.split(/:/).join('-'))).offset().top));
+			}
 		}
 
-		if (owner == 'Quran' || params.force || change.index == 0 || change.key != state.key) {
-			self._last_change_from = owner;
-			//console.debug('change from', owner ? owner : 'anonymous');
-			//console.dir(result);
-			//console.time(result.key + ' callbacks');
-			jQuery.each(self._onchange, function(priority, stack) {
-				jQuery.each(stack, function(index, callback) {
-					callback.call(self, result, owner);
-				});
-			});
-			//console.timeEnd(result.key + ' callbacks');
+		if (params.force && change.key != prior.key || change.index == 0 || change.key != prior.key) {
+			self.run('change', state, from);
 		}
-
 	},
-	/* quran.onchange
-	 *  description - binds a callback function to a change in the application's state
-	 *  usage examples -
-	 *   quran.onchange(function(state) {
-	 *      alert('ayah number: '+ state.ayah);
-	 *      alert('ayah id: '+ state.id);
-	 *      alert('ayah surah: '+ state.surah);
-	 *   });
-	 */
-	onchange: function(callback, priority) {
-		if (!priority)
-			priority = 100;
-		if (!this._onchange[priority])
-			this._onchange[priority] = [];
-		this._onchange[priority].push(callback);
+	// TODO: implement 'load' method, and refactor 'trigger' and 'bind' to 'event' and 'on'
+	load: function(params, from) {
+		var self = this,
+			view = self.data('view'), // search or main
+			change = params.change ? jQuery.extend(params.change, { anchor: true, force: true }) : null;
 
-		this._onchange = jQuery.sort(this._onchange);
+		if (view != 'main') // only main view supported atm
+			return;
+
+		function run(content) {
+			var count = self.data('count');
+
+			count.load++;
+
+			if (change) {
+				function ready(change) {
+					if (count.load > count.ready)
+						self.one('ready', function() { ready(change); }, 2, 'load');
+					else self.change(change, 'load');
+				};
+
+				self.change(change, 'load');
+
+				self.one('load', function() {
+					self.change(change, 'load');
+				}, 4, 'load');
+
+				self.one('ready', function() { ready(change); }, 2, 'load');
+			}
+
+			setTimeout(function() {
+				self.run('load', { params: params, content: content }, from);
+			}, 100);
+		};
+
+		var page = self.data('page'),
+			surah = page.surah,
+			range, url;
+
+		if (params.key) {
+			if (jQuery.inArray(params.key, self.data('keys')) >= 0)
+				return run(jQuery(self.data('content.selector')));
+
+			var key = params.key.split(/:/),
+				ayah = parseInt(key[1]);
+			
+			range = [ayah, ayah];
+		} else
+		if (params.range) {
+			range = params.range;
+		}
+		if (params.page && params.page == 'next') {
+
+			if (page.next)
+				range = [page.next.first, page.next.last];
+		}
+
+		url = surah && range ? '/'+ surah +'/'+ ( range[0] == range[1] ? range[0] : range[0] +'-'+ range[1] ) +'/ajax' : null;
+
+		if (url) {
+			var pages = self.data('pages'),
+				keys = self.data('keys');
+
+			self.ajax(url, params, {
+				wait: true,
+				success: function(response) {
+					var after,
+						fonts = jQuery(),
+						content = jQuery(response.content);
+
+					jQuery.each(response.fonts, function(id, font) {
+						if (jQuery('#'+ id).length)
+							return;
+						else fonts = fonts.add(jQuery(font));
+					});
+
+					jQuery.extend(response, {
+						fonts: fonts,
+						content : content,
+						page : quran.copy(response.page)
+					});
+
+
+					jQuery.each(keys, function(index, value) {
+						if (range[0] > parseInt(value.split(/:/)[1]))
+							after = index;
+						else return false;
+					});
+
+					after = keys[after].split(/:/);
+
+					jQuery('#ayah-'+ after[0] +'-'+ after[1]).after(content);
+
+					jQuery('#content').find('style').last().after(fonts);
+
+					jQuery.merge(pages, response.pages);
+					jQuery.merge(keys, response.keys);
+
+					keys = keys.sort(function(a,b) { return parseInt(a.split(/:/)[1]) > parseInt(b.split(/:/)[1]); })
+
+					if (response.page.last > page.last)
+						page.last = response.page.last;
+
+					if (response.page.next && page.next) {
+						if (response.page.next.first > page.next.first && response.page.next.last > page.next.last)
+							page.next = response.page.next;
+					} else page.next = undefined;
+
+					if (from == 'Quran')
+						run(jQuery(self.data('content.selector')));
+					else run(content.filter(self.data('content.selector')));
+
+					var before = range[0],
+						after = parseInt(after[1]);
+
+					if (before - after > 1) {
+						self.load({ range: [ after + 1, before - 1 ], change: params.change }, 'load');
+					}
+
+					if (params.success)
+						params.success.apply(self, arguments);
+				}
+			});
+		}
 	}
 };

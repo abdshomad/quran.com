@@ -1,0 +1,9 @@
+<%perl>if ($stash->{bismillah}) {</%perl>
+<div class="centered">
+	<div class="inside">
+		<div class="bism" title="<% $stash->{utf8}->{bismillah} %>">
+			<div class="illah"></div>
+		</div>
+	</div>
+</div>
+<%perl>}</%perl>

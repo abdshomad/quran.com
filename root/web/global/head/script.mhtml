@@ -1,0 +1,26 @@
+<%perl>
+	unless ($c->debug) {
+</%perl>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<%perl>
+	} else {
+</%perl>
+<script type="text/javascript" src="http://s0.quran.com/js/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://s0.quran.com/js/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+<%perl>
+		if ($stash->{ua} eq 'msie') {
+</%perl>
+<script type="text/javascript" src="http://s0.quran.com/firebug-lite/pub/firebug-lite-beta.js#enablePersistent,enableTrace,startOpened">
+	{
+		startInNewWindow: false,
+		startOpened: true,
+		disableWhenFirebugActive: false,
+		enableTrace: true,
+		enablePersistent: true
+	}
+</script>
+<%perl>
+		}
+	}
+</%perl>
