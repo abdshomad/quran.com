@@ -44,3 +44,7 @@ important/
 quran.yml
 jira/
 */.git/*
+BUGS
+INSTALL
+TODO
+Makefile.PL
