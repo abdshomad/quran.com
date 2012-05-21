@@ -4,12 +4,17 @@
 BEGIN {
 	use File::Spec;
 	use FindBin;
-	my $dbic_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbic.debug.log');
+	my $dbic_log_file = File::Spec->catdir($FindBin::Bin, '../log/database.log');
 	$ENV{DBIC_TRACE} = "1=$dbic_log_file";
-	my $dbi_log_file = File::Spec->catdir($FindBin::Bin, '..', '.dbi.debug.log');
-	$ENV{DBI_TRACE} = "1=$dbi_log_file";
 };
+use File::Basename 'dirname';
+use File::Spec::Functions qw(catdir splitdir);
 
+# Source directory has precedence
+my @base = (splitdir(dirname(__FILE__)), '..');
+my $lib = join('/', @base, 'lib');
+unshift @INC, $lib;
+push @INC, $lib;
 
 use Catalyst::ScriptRunner;
 Catalyst::ScriptRunner->run('Quran', 'FastCGI');

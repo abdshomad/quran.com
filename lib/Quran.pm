@@ -6,7 +6,7 @@ package Quran;
 use Moose;
 use namespace::autoclean;
 
-use Catalyst::Runtime 5.80;
+use Catalyst::Runtime 5.90;
 
 use Catalyst qw/
 	-Debug
@@ -38,7 +38,7 @@ __PACKAGE__->apply_request_class_roles qw/Catalyst::TraitFor::Request::BrowserDe
 
 our $VERSION = '1.4321101.001'; # i.e. target date to production, e.g. Ramadan (09), day 1 (01), year 1432 rev. 001
 
-my $conf = __PACKAGE__->path_to('conf');
+my $conf = __PACKAGE__->path_to('../../conf');
 
 system($conf ."/load.pl");
 
@@ -46,6 +46,7 @@ __PACKAGE__->config( name => 'Quran' );
 __PACKAGE__->config('Plugin::ConfigLoader' => { file => $conf });
 
 __PACKAGE__->config(
+	root => __PACKAGE__->path_to('../../root'),
 	'Plugin::Authentication' => {
 		default_realm => 'members',
 		realms => {
