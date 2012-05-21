@@ -1,0 +1,148 @@
+<svg height="256" version="1.1" width="256" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-2 -2 32 32">
+	<defs>
+		<linearGradient id="active-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.86"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="active-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="hover-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#ddd;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#88B;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#78C;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="default-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.62"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.38"/>
+		</linearGradient>
+		<linearGradient id="default-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#999;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#666;stop-opacity:1"/>
+		</linearGradient>
+		<path id="path" d="
+M 16.688538 0.000298
+H 3.590825
+c -0.801774 0.000000 -1.454525 0.610838 -1.536022 1.390880
+h 1.244962
+c 0.855329 0.000000 1.552322 0.696992 1.552322 1.552322
+c 0.000000 0.855329 -0.696992 1.552322 -1.552322 1.552322
+H 2.038503
+v 0.775385
+h 1.261262
+c 0.856882 0.000000 1.553874 0.696992 1.553874 1.553874
+c 0.000000 0.856882 -0.696992 1.553098 -1.553874 1.553098
+H 2.038503
+v 0.773832
+h 1.261262
+c 0.855329 0.000000 1.552322 0.696992 1.552322 1.552322
+c 0.000000 0.856882 -0.696992 1.555426 -1.552322 1.555426
+H 2.038503
+v 0.771504
+h 1.261262
+c 0.855329 0.000000 1.552322 0.696992 1.552322 1.553874
+s -0.696992 1.553874 -1.552322 1.553874
+H 2.038503
+v 0.773832
+h 1.260485
+c 0.856882 0.000000 1.553874 0.696216 1.553874 1.553098
+c 0.000000 0.856882 -0.696992 1.553874 -1.553874 1.553874
+H 2.041608
+C 2.059459 20.861172 2.744809 21.538759 3.590825 21.538759
+h 13.097713
+c 0.856882 0.000000 1.552322 -0.695440 1.552322 -1.552322
+V 1.552619
+C 18.240859 0.695738 17.545419 0.000298 16.688538 0.000298
+z
+M 16.979598 5.433423
+c 0.000000 0.428441 -0.346944 0.776161 -0.776161 0.776161
+H 8.247789
+c -0.429217 0.000000 -0.776161 -0.347720 -0.776161 -0.776161
+V 2.037720
+c 0.000000 -0.428441 0.346944 -0.776161 0.776161 -0.776161
+h 7.955648
+c 0.429217 0.000000 0.776161 0.347720 0.776161 0.776161
+V 5.433423
+z
+M 4.075925 18.465939
+c 0.000000 -0.429993 -0.348496 -0.776937 -0.776161 -0.776937
+h -2.522522
+c -0.428441 0.000000 -0.776161 0.346944 -0.776161 0.776937
+c 0.000000 0.428441 0.348496 0.776161 0.776161 0.776161
+h 2.522522
+C 3.727429 19.242100 4.075925 18.894380 4.075925 18.465939
+z
+M 0.777242 3.718885
+h 2.523298
+c 0.427665 0.000000 0.775385 -0.347720 0.775385 -0.775385
+c 0.000000 -0.430769 -0.347720 -0.776161 -0.775385 -0.776161
+H 0.777242
+c -0.429217 0.000000 -0.776161 0.345392 -0.776161 0.776161
+C 0.000305 3.371165 0.348025 3.718885 0.777242 3.718885
+z
+M 0.777242 7.600465
+h 2.522522
+c 0.429217 0.000000 0.776161 -0.347720 0.776161 -0.776161
+s -0.347720 -0.776161 -0.776161 -0.776161
+h -2.522522
+c -0.429217 0.000000 -0.776161 0.347720 -0.776161 0.776161
+S 0.348025 7.600465 0.777242 7.600465
+z
+M 0.777242 11.481268
+h 2.522522
+c 0.427665 0.000000 0.776161 -0.347720 0.776161 -0.776937
+s -0.347720 -0.775385 -0.776161 -0.775385
+h -2.522522
+c -0.429217 0.000000 -0.776937 0.346168 -0.776937 0.775385
+S 0.348025 11.481268 0.777242 11.481268
+z
+M 0.001081 14.584359
+c 0.000000 0.429217 0.346168 0.777713 0.776161 0.777713
+h 2.522522
+c 0.427665 0.000000 0.776161 -0.348496 0.776161 -0.777713
+c 0.000000 -0.428441 -0.347720 -0.776161 -0.776161 -0.776161
+h -2.522522
+C 0.347248 13.808198 0.001081 14.155918 0.001081 14.584359
+z
+Z		"/>
+		<style type="text/css"><![CDATA[
+			.fill {
+				stroke: none;
+			}
+			.fill.default {
+				fill: url(#default-fill);
+			}
+			.fill.hover {
+				fill: url(#hover-fill);
+			}
+			.fill.active {
+				fill: url(#active-fill);
+			}
+			.stroke {
+				fill: none;
+				stroke-width: 4;
+				stroke-linejoin: round;
+			}
+			.stroke.default {
+				stroke: url(#default-stroke)
+			}
+			.stroke.hover {
+				stroke: url(#hover-stroke)
+			}
+			.stroke.active {
+				stroke: url(#active-stroke)
+			}
+		]]></style>
+	</defs>
+	<rect x="-2" y="-2" width="100%" height="100%" r="0" rx="0" ry="0" fill="white" stroke="none" opacity="0"/>
+	<g transform="translate(0,0)">
+		<g transform="scale(1)">
+			<use id="stroke" xlink:href="#path" stroke="url(#active-stroke)" fill="none"/>
+			<use id="fill" xlink:href="#path" stroke="none" fill="url(#active-fill)"/>
+		</g>
+	</g>
+</svg>

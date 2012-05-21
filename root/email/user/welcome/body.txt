@@ -1,0 +1,12 @@
+quran.com welcomes you, [% name %]!
+
+What can you do with a quran.com account?
+ - feature
+ - feature
+ - feature
+
+Getting started with your quran.com account
+ - suggestion
+ - tip
+ - suggestion
+ - tip

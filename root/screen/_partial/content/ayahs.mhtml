@@ -1,0 +1,156 @@
+<%perl>
+	for my $key (@{ $stash->{keys} }) {
+		my $content = $stash->{content}->{ $key };
+		my ($surah, $ayah) = split /:/, $key, 2;
+</%perl>
+<a class="anchor" id="anchor-<% $surah .'-'. $ayah %>"></a>
+<div class="ayah container" id="ayah-<% $surah .'-'. $ayah %>" data-surah="<% $surah %>" data-ayah="<% $ayah %>" data-key="<% $key %>">
+	<header>
+		<table>
+			<tbody>
+				<tr>
+					<td class="audio">
+						<ul class="player">
+							<li class="state pre"></li>
+							<li class="sound"><audio preload="auto" autobuffer></audio></li>
+							<li class="ui" data-key="<% $key %>"><span class="start"><span class="icon audio play"><b><s class="s1"></s></b></span></span></li>
+						</ul>
+					</td>
+					<td class="ayahTools state" data-key="<% $key %>">
+						<div class="wrap">
+							<ul>
+								<%perl>if ($stash->{account}) {</%perl>
+								<li title="Bookmark" class="tip-hover-n bookmark<% $stash->{account}->{bookmarks}->{ $surah }->{ $ayah } ? ' active' : '' %>" data-id="bookmark">
+									<span class="icon tools bookmark">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="label"><% $c->i18n->localize($c, 'bookmark') %></label>
+								</li>
+								<li title="Lastmark" class="tip-hover-n lastmark<% $stash->{account}->{lastmark}->{key} eq $key ? ' active' : '' %>" data-id="lastmark">
+									<span class="icon tools lastmark">
+										<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+									</span>
+									<label class="label"><% $c->i18n->localize($c, 'lastmark') %></label>
+								</li>
+								<%perl>}</%perl>
+							</ul>
+						</div>
+					</td>
+					<td class="ayah">
+						<div class="wrap">
+							<label class="label"><span class="number"><% $c->i18n->localize($c, $surah, { context => 'number' }) .':'. $c->i18n->localize($c, $ayah, { context => 'number' }) %></span></label>
+						</div>
+					</td>
+					<td class="ayahTools menu" data-key="<% $key %>">
+						<div class="wrap">
+							<div class="head">
+								<span class="icon scroll down">
+									<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+								</span>
+							</div>
+							<div class="body">
+								<menu>
+									<%perl>if ($stash->{account}) {</%perl>
+									<li class="lastmark<% $stash->{account}->{lastmark}->{key} eq $key ? ' selected' : '' %>" data-id="lastmark">
+										<span class="icon tools lastmark">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'lastmark') %></label>
+									</li>
+									<li class="bookmark<% $stash->{account}->{bookmarks}->{ $surah }->{ $ayah } ? ' selected' : '' %>" data-id="bookmark">
+										<span class="icon tools bookmark">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'bookmark') %></label>
+									</li>
+									<li class="tags disabled" data-id="tags">
+										<span class="icon tools tags">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'tags') %> (<% $c->i18n->localize($c, 'in development') %>)</label>
+									</li>
+									<li class="notes disabled" data-id="notes">
+										<span class="icon tools notes">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'notes') %> (<% $c->i18n->localize($c, 'in development') %>)</label>
+									</li>
+									<li class="groups disabled" data-id="groups">
+										<span class="icon tools groups">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'groups') %> (<% $c->i18n->localize($c, 'in development') %>)</label>
+									</li>
+									<%perl>}</%perl>
+									<li class="share disabled" data-id="share">
+										<span class="icon tools share">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, '[re]share') %> (<% $c->i18n->localize($c, 'in development') %>)</label>
+									</li>
+									<li class="link disabled" data-id="link">
+										<span class="icon tools link">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+										<label class="hidden"><% $c->i18n->localize($c, 'link') %> (<% $c->i18n->localize($c, 'in development') %>)</label>
+									</li>
+								</menu>
+							</div>
+						</div>
+					</td>
+					<td class="anchor scrollAnchor" data-key="<% $key %>">
+						<div class="wrap">
+							<span class="icon ayah">
+								<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+							</span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</header>
+	<section class="quran" style="font-size: <% $session->{navMenu}->{textSize}->{quran} ? $session->{navMenu}->{textSize}->{quran} : 100 %>%;" lang="ar" dir="rtl">
+		<div class="content">
+			<%perl>if ($content->{quran}->{text}) {</%perl>
+			<p class="text <% $content->{quran}->{text}->{resource_code} %>"><% $content->{quran}->{text}->{text} %></p>
+			<%perl>} elsif ($content->{quran}->{words}) {</%perl>
+			<p class="words" data-key="<% $key %>"><%perl>
+			for (@{ $content->{quran}->{words} }) {
+				my $translation = $_->{translation};
+				my $attrs = "class=\"$_->{type} p$_->{page}\" data-glyph-id=\"$_->{glyph_id}\"". ( $_->{type} eq 'word' ? " data-word-id=\"$_->{word_id}\"". ( $translation ? " title=\"$translation\" dir=\"". $stash->{language}->{direction} ."\"" : '' ) : '' );
+				my $space = $_->{type} eq 'word' ? ' ' : '';</%perl><% $space %><b <% $attrs %>><% $_->{code} %></b><%perl>}</%perl>
+			</p>
+			<%perl>} elsif ($content->{quran}->{images}) {</%perl>
+			<p class="images"><img src="<% $content->{quran}->{images}->{url} %>" alt="<% $content->{quran}->{images}->{alt} %>" width="<% $content->{quran}->{images}->{width} %>" /></p>
+			<%perl>}</%perl>
+		</div>
+		<nav>
+			<b data-key="<% $key %>" class="change prev<% not defined $stash->{page}->{prev} and $key eq $stash->{page}->{first} ? ' disabled' : '' %>"><a></a></b>
+			<b data-key="<% $key %>" class="change next<% not defined $stash->{page}->{next} and $key eq $stash->{page}->{last}  ? ' disabled' : '' %>"><a></a></b>
+		</nav>
+	</section>
+	<%perl>if ($stash->{language}->{language_code} eq 'ar') {</%perl>
+	<section class="tafsir">
+		<h2><% $stash->{utf8}->{tafsir} %></h2>
+		<menu>
+		<%perl>for (@{ $stash->{options}->{resources}->{tafsir} }) {</%perl>
+			<li><a href="/ar/tafsir/<% $_->{resource_code} %>/<% $surah %>/<% $ayah %>" target="tafsir"><% $_->{name} %></a></li>
+		<%perl>}</%perl>
+		</menu>
+	</section>
+	<%perl>} else {</%perl>
+	<section class="resources" style="font-size: <% $session->{navMenu}->{textSize}->{resources} ? $session->{navMenu}->{textSize}->{resources} : 100 %>%;">
+		<table class="content">
+			<tbody>
+			<%perl>for my $resource (@{ $content->{resources} }) {</%perl>
+				<tr id="<% 'resource-'. $resource->{type} .'-'. $resource->{resource_code} .'-'. $surah .'-'. $ayah %>" class="<% $resource->{type} eq $resource->{resource_code} ? $resource->{type} : $resource->{type} .' '. $resource->{resource_code} %>" data-priority="<% $resource->{priority} %>">
+					<th title="<% $resource->{author}->{name} ne 'Unknown' ? $resource->{author}->{name} : $resource->{name} %>"><h2><% $resource->{name} %></h2></th>
+					<td><p><% $resource->{text} %></p></td>
+				</tr>
+			<%perl>}</%perl>
+			</tbody>
+		</table>
+	</section>
+%	}
+</div>
+<%perl>}</%perl>

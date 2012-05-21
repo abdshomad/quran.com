@@ -1,0 +1,8 @@
+<div id="foot">
+<%perl>
+	for my $language_code (@{ $c->i18n->{language}->{installed}->{array} }) {
+		my $language = $c->i18n->{language}->{installed}->{hash}->{ $language_code };
+</%perl>
+	<span title="<% $language->{english} %>"><a href="/<% $language_code %>/"><% $language->{unicode} %></a></span>
+<%perl>}</%perl>
+</div>

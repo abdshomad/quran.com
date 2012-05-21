@@ -1,0 +1,4 @@
+<div id="body" class="<% $stash->{class} ? $stash->{class} : 'default' %>">
+% $m->call_next;
+	<div class="notificationSystem"></div>
+</div>

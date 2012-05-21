@@ -1,0 +1,39 @@
+h1 {
+	float: right;
+	margin: 0;
+	font-family: Times New Roman;
+	font-size: 2.62em;
+	position: relative;
+	top: 10px;
+}
+
+hr {
+	border: 1px dashed;
+	clear: both;
+	position: relative;
+	top: 16px;
+}
+
+body {
+	background-color: white;
+	color: black;
+	padding: 20px 50px;
+}
+
+h2 {
+	margin: 0;
+	font-size: 2.3em;
+	float: left;
+	position: relative;
+	top: 12px;
+}
+
+p {
+	font-family: Times New Roman;
+	word-spacing: 3px;
+	white-space: pre-line;
+	text-align: justify;
+	font-size: 28px;
+	line-height: 40px;
+}
+

@@ -1,0 +1,67 @@
+<div class="resources selectResource">
+	<div class="header">
+		<div class="label">
+			<label class="section"><% $c->i18n->localize($c, '{language} Translations', { context => 'side navigation, section label', token => { language => $stash->{language}->{unicode} } }) %></label>
+			<label class="control"><% $c->i18n->localize($c, 'text size', { context => 'side navigation, text size control label' }) %></label>
+		</div>
+		<div class="control textSize">
+			<input class="textSize ajax" data-class="resources" type="hidden" data-min="90" data-max="200" data-inc="10" value="<% $session->{selected}->{size}->{resources} %>"/>
+			<div class="button minus">
+				<span class="icon text minus">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+			<div class="button plus">
+				<span class="icon text plus">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="body scroll-list">
+		<div class="list">
+			<div class="outer wrap">
+				<div class="inner wrap">
+					<ul>
+						<%perl>
+							for my $option (@{ $stash->{options}->{resources}->{transliteration} }) {
+						</%perl>
+						<li class="item">
+							<span class="label"><% $option->{name} %></span>
+							<span class="input"><input class="selectResource ajax" data-class="resources" data-type="transliteration" name="transliteration" type="checkbox"/></span>
+						</li>
+						<%perl>
+							}
+						</%perl>
+						<%perl>
+							for my $option (@{ $stash->{options}->{resources}->{translation} }) {
+						</%perl>
+						<li class="item" title="<% $option->{author}->{name} %>">
+							<span class="label" lang="<% $stash->{language}->{language_code} %>" dir="<% $stash->{language}->{direction} %>"><% $option->{name} %></span>
+							<span class="input"><input class="selectResource ajax" data-class="resources" data-type="translation" name="<% $option->{resource_code} %>" type="checkbox"/></span>
+						</li>
+						<%perl>
+							}
+						</%perl>
+					</ul>
+					<div class="strip"></div>
+				</div>
+			</div>
+		</div>
+		<div class="scroll">
+			<div class="button up">
+				<span class="icon scroll up">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+			<div class="range">
+				<div class="bar"></div>
+			</div>
+			<div class="button down">
+				<span class="icon scroll down">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,93 @@
+%	if ($user) {
+<div class="notes hidden">
+	<div class="create">
+		<div class="profile">
+			<span class="name"><a href="/$login">User Alias</a></span>
+			<span class="edit">(<a href="/profile/edit">Edit</a>)</span>
+			<span class="hypen"> - </span>
+			<span class="sites"><a>0 connected sites</a></span>
+			<span class="hypen"> - </span>
+			<span class="followers"><a>0 followers</a></span>
+		</div>
+		<div class="form collapsed">
+			<span class="triangle"></span>
+			<div class="input">
+				<input type="text" class="subject" value="(no subject)"/>
+				<textarea class="body"></textarea>
+				<span class="close">[X]</span>
+				<div class="insert">
+					<label>Insert:</label>
+					<span class="link"><a>Link</a></span>
+					<span class="photo"><a>Photo</a></span>
+					<span class="subject"><a>Subject</a></span>
+				</div>
+			</div>
+			<div class="post">
+				<input class="submit" type="button" value="Post"/>
+				<select class="privacy">
+					<option value="public">Public</option>
+					<option value="private">Private</option>
+				</select>
+				<span class="post-to-public" class="hidden">
+					to <span class="profile"><a>Profile</a></span>
+					<span class="comma">, </span>
+					<span class="sites"><a>n connected sites</a></span>
+					<span class="and"> and </span>
+					<span class="followers"><a>n followers</a></span>
+				</span>
+			</div>
+		</div>
+	</div>
+%		if (exists $user->{note}->{$key}) {
+%			if (exists $user->{note}->{$key}->{self}) {
+	<table class="list self">
+		<tbody>
+%				for my $note (@{ $user->{note}->{$key}->{self} }) {
+			<tr class="collapsed">
+				<td class="name"><% $note->{name} %></td>
+				<td class="body">
+					<span class="subject"><strong><% $note->{subject} %></strong></span>
+					<span class="preview"> - <% $note->{preview} %></span>
+				</td>
+				<td class="action">
+					<%perl>if ($note->{mutual}) {</%perl><span class="comment" title="Comment"><a>[c]</a></span><%perl>}</%perl>
+					<span class="share" title="Share"><a>[s]</a></span>
+					<span class="email" title="Email"><a>[e]</a></span>
+				</td>
+				<td class="time"><% $note->{time} %></td>
+				<td class="function">
+					<span class="m" title="menu">[m]</span><span class="e" title="expand">[e]</span>
+				</td>
+			</tr>
+%				}
+		</tbody>
+	</table>
+%			}
+%			if (exists $user->{note}->{$key}->{followed}) {
+	<table class="list followed">
+		<tbody>
+%				for my $note (@{ $user->{note}->{$key}->{followed} }) {
+			<tr class="collapsed">
+				<td class="name"><% $note->{name} %></td>
+				<td class="body">
+					<span class="subject"><strong><% $note->{subject} %></strong></span>
+					<span class="preview"> - <% $note->{preview} %></span>
+				</td>
+				<td class="action">
+					<%perl>if ($note->{mutual}) {</%perl><span class="comment" title="Comment"><a>[c]</a></span><%perl>}</%perl>
+					<span class="like" title="Like"><a>[l]</a></span>
+					<span class="share" title="Share"><a>[s]</a></span>
+					<span class="email" title="Email"><a>[e]</a></span>
+				</td>
+				<td class="time"><% $note->{time} %></td>
+				<td class="function">
+					<span class="m" title="menu">[m]</span><span class="e" title="expand">[e]</span>
+				</td>
+			</tr>
+%				}
+		</tbody>
+	</table>
+%			}
+%		}
+</div>
+%	}

@@ -1,0 +1,3 @@
+<div id="title" class="surah-name">
+	<span class="surah"></span><a class="name surah-<% $stash->{page}->{surah} %>" href="/<% $stash->{language}->{language_code} %>/<% $stash->{page}->{surah} %>"><img class="i18n" data-message="<% $stash->{surahs}->[$stash->{page}->{surah} - 1]->{simple} %>" data-context="chapter title" src="/static/images/png/surah.<% $stash->{page}->{surah} %>.png" alt="<% $c->i18n->localize($c, $stash->{surahs}->[$stash->{page}->{surah} - 1]->{simple}, { context => 'chapter title', attribute => 1 }) %>"/></a>
+</div>

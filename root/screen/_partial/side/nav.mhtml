@@ -1,0 +1,143 @@
+<nav>
+	<header class="search">
+		<form method="GET" action="/<% $stash->{language}->{language_code} %>/search">
+			<input class="query sans" type="search" name="q" value="${ query }" placeholder="Search..." autocomplete="off" autofocus="autofocus"/>
+			<button type="button" class="type"><span class="down"></span></button>
+			<div class="type">
+				<ul class="sans">
+					<li data-value="auto" class="selected"><% $c->i18n->localize($c, 'Auto') %></li>
+					<li data-value="quran"><% $c->i18n->localize($c, 'Quran (Arabic)') %></li>
+					<li data-value="translation"><% $c->i18n->localize($c, 'Translation') %></li>
+					<li data-value="transliteration"><% $c->i18n->localize($c, 'Transliteration') %></li>
+				</ul>
+				<menu class="sans">
+					<li class="selected">&#10004;</li>
+					<li>&#10004;</li>
+					<li>&#10004;</li>
+					<li>&#10004;</li>
+				</menu>
+			</div>
+			<button type="button" class="find">
+				<span class="icon find">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</button>
+			<input type="hidden" name="p" value="1" />
+			<input type="hidden" name="t" value="auto" class="type" />
+		</form>
+	</header>
+	<header class="surahs panel">
+		<h1><span class="toggle center"><b><u><s></s></u></b></span><% $c->i18n->localize($c, "Surahs", { context => 'navigation, surah list' }) %></h1>
+		<form>
+			<h2>
+				<label class="default"><% $c->i18n->localize($c, 'sort :', { context => 'navigation, sort surah control, default label' }) %></label>
+				<label class="by-revelation"><% $c->i18n->localize($c, 'by revelation :', { context => 'navigation, sort surah control, ordered by revelation label' }) %></label>
+				<label class="by-number"><% $c->i18n->localize($c, 'mushaf :', { context => 'navigation, sort surah control, ordered by number label' }) %></label>
+			</h2>
+			<menu>
+				<button class="sort"></button>
+			</menu>
+		</form>
+	</header>
+	<section class="surahs panel">
+		<menu>
+			<%perl>
+				for my $i (1..114) {
+					my $surah = $stash->{surahs}->[$i-1];
+			</%perl>
+			<li data-number="<% $surah->{number} %>" data-revelation="<% $surah->{order} %>">
+				<a href="<% '/'. $stash->{language}->{language_code} .'/'. $i %>">
+					<span class="number" data-sort="<% $i %>"><% $c->i18n->localize($c, $i, { context => 'number' }) %></span>
+					<span class="num-sep sep">-</span>
+					<span class="name"><% $c->i18n->localize($c, $surah->{simple}, { context => 'chapter title' }) %></span>
+					<span class="juz"><% $c->i18n->localize($c, 'Juz {number}', { context => 'part number', token => { number => $c->i18n->localize($c, $surah->{juz}, { context => 'number' }) } }) %></span>
+					<span class="revelation order" data-sort="<% $surah->{order} %>"><% $c->i18n->localize($c, $surah->{order}, { context => 'number' }) %></span>
+					<span class="rev-sep sep">:</span>
+					<span class="revelation place <% $surah->{place} %>" title="<% $c->i18n->localize($c, $surah->{place}, { context => 'revelation place', attribute => 1 })  %>"><% $surah->{place} eq 'makkah' ? 'mK' : 'mD' %></span>
+					<span class="bg"></span>
+				</a>
+			</li>
+			<%perl>
+				}
+			</%perl>
+		</menu>
+	</section>
+	<header class="quran panel">
+		<h1><span class="toggle center"><b><u><s></s></u></b></span><% $c->i18n->localize($c, "Qur'an Script", { context => 'navigation, quran script section' }) %></h1>
+		<form>
+			<h2>
+				<label><% $c->i18n->localize($c, 'size :', { context => 'navigation, text size control' }) %></label>
+			</h2>
+			<menu>
+				<button class="size minus">-</button>
+				<button class="size plus">+</button>
+			</menu>
+			<input class="textSize quran" type="hidden" data-min="70" data-max="400" data-inc="10" value="100"/>
+		</form>
+	</header>
+	<section class="quran panel">
+		<form>
+			<menu>
+				<li><h2><label><% $c->i18n->localize($c, 'Word for Word System', { context => 'navigation, quran options - word system option' }) %><input class="ajax words" data-class="quran" data-type="words" name="quran" type="radio"></label></h2></li>
+				<li><h2><label><% $c->i18n->localize($c, 'Quran.com Ayah Images', { context => 'navigation, quran options - images option' }) %><input class="ajax images" data-class="quran" data-type="images" name="quran" type="radio"></label></h2></li>
+				<%perl>
+					my $text_option_default = { name => 'Uthmani Script', resource_code => 'uthmani_script' };
+				</%perl>
+				<li class="text">
+					<h2>
+						<label>
+							<span class="label">
+								<% $c->i18n->localize($c, 'Tanzil Project : {script_name}', { context => 'navigation, quran options - text option', token => { script_name => '<span class="value">'. $c->i18n->localize($c, $text_option_default->{name}, { context => 'navigation, quran options - text option - script name' }) .'</span>' }}) %>
+							</span>
+							<input class="ajax text key" data-class="quran" data-type="text" name="quran" value="<% $text_option_default->{resource_code} %>" type="radio">
+						</label>
+						<span class="toggle right center"><b><u><s></s></u></b></span>
+					</h2>
+					<menu>
+						<%perl>
+							for my $option (@{ $stash->{options}->{quran}->{text} }) {
+								my $selected = $option->{resource_code} eq $text_option_default->{resource_code};
+						</%perl>
+						<li<% $selected ? ' class="selected"' : '' %>><label><% $c->i18n->localize($c, $option->{name}, { context => 'navigation, quran options - text option name' }) %><input class="text val <% $option->{resource_code} %>" name="text" value="<% $option->{resource_code} %>" type="radio"<% $selected ? ' checked="checked"' : '' %>></label></li>
+						<%perl>}</%perl>
+					</menu>
+				</li>
+			</menu>
+		</form>
+		<cite>Qur'an text provided by <a href="http://tanzil.net/download/">Tanzil Project</a></cite>
+	</section>
+	<%perl>if ($stash->{language}->{language_code} ne 'ar') {</%perl>
+	<header class="resources panel">
+		<h1><span class="toggle center"><b><u><s></s></u></b></span><% $c->i18n->localize($c, '{language} Translations', { context => 'navigation, translation options', token => { language => $stash->{language}->{unicode} } }) %></h1>
+		<form>
+			<h2>
+				<label><% $c->i18n->localize($c, 'size :', { context => 'navigation, text size control' }) %></label>
+			</h2>
+			<menu>
+				<button class="size minus">-</button>
+				<button class="size plus">+</button>
+			</menu>
+			<input class="textSize resources" type="hidden" data-min="80" data-max="300" data-inc="10" value="100"/>
+		</form>
+	</header>
+	<section class="resources panel">
+		<form>
+			<menu>
+			<%perl>
+				for my $option (@{ $stash->{options}->{resources}->{transliteration} }) {
+			</%perl>
+				<li><label lang="<% $stash->{language}->{language_code} %>" dir="<% $stash->{language}->{direction} %>"><% ( $option->{name} ne $option->{author}->{name} and $option->{author}->{name} ne 'Unknown' ) ? "<abbr title='$option->{author}->{name}'>$option->{name}</abbr>" : $option->{name} %><input class="ajax transliteration" data-class="resources" data-type="transliteration" name="<% $option->{resource_code} %>" type="checkbox"></label></li>
+			<%perl>
+				}
+				for my $option (@{ $stash->{options}->{resources}->{translation} }) {
+			</%perl>
+				<li><label lang="<% $stash->{language}->{language_code} %>" dir="<% $stash->{language}->{direction} %>"><% ( $option->{name} ne $option->{author}->{name} and $option->{author}->{name} ne 'Unknown' ) ? "<abbr title='$option->{author}->{name}'>$option->{name}</abbr>" : $option->{name} %><input class="ajax translation <% $option->{resource_code} %>" data-class="resources" data-type="translation" name="<% $option->{resource_code} %>" type="checkbox"></label></li>
+			<%perl>
+				}
+			</%perl>
+			</menu>
+		</form>
+		<cite>Translations provided by <a href="http://tanzil.net/trans/">Tanzil Project</a></cite>
+	</section>
+	<%perl>}</%perl>
+</nav>

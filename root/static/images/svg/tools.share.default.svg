@@ -1,0 +1,133 @@
+<svg height="256" version="1.1" width="256" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-2 -2 32 32">
+	<defs>
+		<linearGradient id="active-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.86"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="active-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="hover-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#ddd;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#88B;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#78C;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="default-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.62"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.38"/>
+		</linearGradient>
+		<linearGradient id="default-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#999;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#666;stop-opacity:1"/>
+		</linearGradient>
+		<path id="path" d="
+M 4.233902 12.315419
+l 5.894745 -2.921071
+v -1.724747
+h -0.664713
+c -0.329966 0.000000 -0.643991 -0.066950 -0.930120 -0.188893
+v 0.923744
+l -5.894745 2.922664
+v 2.320916
+h 1.594036
+V 12.315419
+z
+M 19.974210 13.648830
+v -2.321713
+l -5.894745 -2.921868
+v -0.922947
+c -0.285333 0.121147 -0.600154 0.188096 -0.929323 0.188096
+h -0.663119
+l -0.000797 1.724747
+l 5.894745 2.921868
+v 1.332614
+H 19.974210
+z
+M 12.105251 13.648830
+v -5.978432
+h -1.594036
+v 5.978432
+H 12.105251
+z
+M 21.021491 14.445848
+H 17.335283
+c -0.879908 0.000000 -1.594036 0.714128 -1.594036 1.594036
+V 19.726092
+c 0.000000 0.879908 0.714128 1.594036 1.594036 1.594036
+h 3.686208
+c 0.879908 0.000000 1.594036 -0.714128 1.594036 -1.594036
+v -3.686208
+C 22.615527 15.159975 21.901399 14.445848 21.021491 14.445848
+z
+M 5.280386 14.445848
+H 1.594178
+c -0.879908 0.000000 -1.594036 0.714128 -1.594036 1.594036
+V 19.726092
+c 0.000000 0.879908 0.714128 1.594036 1.594036 1.594036
+h 3.686208
+c 0.879908 0.000000 1.594036 -0.714128 1.594036 -1.594036
+v -3.686208
+C 6.874422 15.159975 6.160294 14.445848 5.280386 14.445848
+z
+M 9.464731 6.874176
+H 13.150939
+c 0.879908 0.000000 1.594036 -0.714128 1.594036 -1.594036
+V 1.593933
+c 0.000000 -0.879908 -0.714128 -1.594036 -1.594036 -1.594036
+h -3.686208
+c -0.879908 0.000000 -1.594036 0.714128 -1.594036 1.594036
+v 3.686208
+C 7.870695 6.160049 8.584823 6.874176 9.464731 6.874176
+z
+M 13.150939 14.445848
+h -3.686208
+c -0.879908 0.000000 -1.594036 0.714128 -1.594036 1.594036
+V 19.726092
+c 0.000000 0.879908 0.714128 1.594036 1.594036 1.594036
+H 13.150939
+c 0.879908 0.000000 1.594036 -0.714128 1.594036 -1.594036
+v -3.686208
+C 14.744975 15.159975 14.030846 14.445848 13.150939 14.445848
+z
+Z		"/>
+		<style type="text/css"><![CDATA[
+			.fill {
+				stroke: none;
+			}
+			.fill.default {
+				fill: url(#default-fill);
+			}
+			.fill.hover {
+				fill: url(#hover-fill);
+			}
+			.fill.active {
+				fill: url(#active-fill);
+			}
+			.stroke {
+				fill: none;
+				stroke-width: 4;
+				stroke-linejoin: round;
+			}
+			.stroke.default {
+				stroke: url(#default-stroke)
+			}
+			.stroke.hover {
+				stroke: url(#hover-stroke)
+			}
+			.stroke.active {
+				stroke: url(#active-stroke)
+			}
+		]]></style>
+	</defs>
+	<rect x="-2" y="-2" width="100%" height="100%" r="0" rx="0" ry="0" fill="white" stroke="none" opacity="0"/>
+	<g transform="translate(0,0)">
+		<g transform="scale(1)">
+			<use id="stroke" xlink:href="#path" stroke="url(#default-stroke)" fill="none"/>
+			<use id="fill" xlink:href="#path" stroke="none" fill="url(#default-fill)"/>
+		</g>
+	</g>
+</svg>

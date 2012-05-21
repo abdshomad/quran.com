@@ -1,0 +1,30 @@
+<svg height="28" version="1.1" width="28" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 40 40">
+	<defs>
+		<linearGradient id="default-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="default-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="active-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.62"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.38"/>
+		</linearGradient>
+		<linearGradient id="active-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#999;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#666;stop-opacity:1"/>
+		</linearGradient>
+	</defs>
+	<path fill="none" stroke="url(#active-stroke)" stroke-width="3" stroke-linejoin="round" opacity="1" class="stroke" d="M16,3.5c-4.142,0-7.5,3.358-7.5,7.5c0,4.143,7.5,18.121,7.5,18.121S23.5,15.143,23.5,11C23.5,6.858,20.143,3.5,16,3.5z M16,14.584c-1.979,0-3.584-1.604-3.584-3.584S14.021,7.416,16,7.416S19.584,9.021,19.584,11S17.979,14.584,16,14.584z"/>
+	<path fill="url(#active-fill)" stroke="none" opacity="1" class="fill" d="M16,3.5c-4.142,0-7.5,3.358-7.5,7.5c0,4.143,7.5,18.121,7.5,18.121S23.5,15.143,23.5,11C23.5,6.858,20.143,3.5,16,3.5z M16,14.584c-1.979,0-3.584-1.604-3.584-3.584S14.021,7.416,16,7.416S19.584,9.021,19.584,11S17.979,14.584,16,14.584z"/>
+</svg>

@@ -1,0 +1,31 @@
+<&| /screen/_partial/content.mhtml &>
+	<header>
+		<h1>Search results</h1>
+	</header>
+	<& /screen/_partial/content/ayahs.mhtml &>
+	<footer>
+		<nav>
+			<%perl>if ($stash->{p} > 1) {</%perl>
+			<a class="prev" href="<% "/$stash->{language}->{language_code}/search?q=$stash->{q}&p=". ($stash->{p} - 1) ."&t=$stash->{t}" %>">
+				<span class="icon left"><b><s class="s1"></s></b></span>
+			</a>
+			<%perl>}</%perl>
+			<%perl>if (scalar @{ $stash->{keys} } >= $stash->{l}) {</%perl>
+			<a class="next" href="<% "/$stash->{language}->{language_code}/search?q=$stash->{q}&p=". ($stash->{p} + 1) ."&t=$stash->{t}" %>">
+				<span class="icon right"><b><s class="s1"></s></b></span>
+			</a>
+			<%perl>}</%perl>
+		</nav>
+	</footer>
+</&>
+<&| /screen/_partial/side.mhtml &>
+	<%perl>
+		print $view->get($c, $m, '/screen/_partial/side/nav.mhtml', {
+			query => $stash->{query}
+		}, {
+			language_code => $stash->{language}->{language_code}
+		}, {
+			debug => 0
+		});
+	</%perl>
+</&>

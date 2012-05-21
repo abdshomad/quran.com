@@ -1,0 +1,4 @@
+		<h1><% $c->i18n->localize($c, 'Tafsir {name}', { context => 'tafsir label', token => { name => $stash->{content}->{name} } }) %></h1>
+		<h2><% $stash->{content}->{ayah_key} %></h2>
+		<hr/>
+		<p><% $stash->{content}->{text} %></p>

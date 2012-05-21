@@ -1,0 +1,72 @@
+<svg height="256" version="1.1" width="256" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-2 -2 32 32">
+	<defs>
+		<linearGradient id="active-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.86"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="active-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="hover-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#ddd;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#88B;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#78C;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="default-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.62"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.38"/>
+		</linearGradient>
+		<linearGradient id="default-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#999;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#666;stop-opacity:1"/>
+		</linearGradient>
+		<path id="path" d="
+M 22.227459 21.229278
+m -8.405843 -5.495233
+c 0.354798 0.354799 0.532207 0.781688 0.532226 1.280668 -0.000019 0.498942 -0.177428 0.925832 -0.532226 1.280668 -0.343748 0.354797 -0.770637 0.532205 -1.280668 0.532226 -0.498979 -0.000021 -0.925868 -0.177429 -1.280668 -0.532226
+l -1.896055 1.912687
+c 0.887028 0.887020 1.945935 1.330542 3.176724 1.330565 1.241842 -0.000023 2.306292 -0.443545 3.193355 -1.330565 0.887022 -0.887065 1.330543 -1.951515 1.330565 -3.193355 -0.000022 -1.241878 -0.443543 -2.300785 -1.330565 -3.176724
+l -11.115994 -11.133456 4.612858 -0.000000 0.000000 -2.704415 -9.114369 -0.000001 -0.116424 0.116424 0.000001 9.114369 2.704415 -0.000000 0.000000 -4.612858 11.116825 11.115994
+z
+Z		"/>
+		<style type="text/css"><![CDATA[
+			.fill {
+				stroke: none;
+			}
+			.fill.default {
+				fill: url(#default-fill);
+			}
+			.fill.hover {
+				fill: url(#hover-fill);
+			}
+			.fill.active {
+				fill: url(#active-fill);
+			}
+			.stroke {
+				fill: none;
+				stroke-width: 4;
+				stroke-linejoin: round;
+			}
+			.stroke.default {
+				stroke: url(#default-stroke)
+			}
+			.stroke.hover {
+				stroke: url(#hover-stroke)
+			}
+			.stroke.active {
+				stroke: url(#active-stroke)
+			}
+		]]></style>
+	</defs>
+	<rect x="-2" y="-2" width="100%" height="100%" r="0" rx="0" ry="0" fill="white" stroke="none" opacity="0"/>
+	<g transform="translate(0,0)">
+		<g transform="scale(1)">
+			<use id="stroke" xlink:href="#path" stroke="url(#active-stroke)" fill="none"/>
+			<use id="fill" xlink:href="#path" stroke="none" fill="url(#active-fill)"/>
+		</g>
+	</g>
+</svg>

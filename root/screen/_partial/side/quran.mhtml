@@ -1,0 +1,72 @@
+<div class="quran selectResource">
+	<div class="header">
+		<div class="label">
+			<label class="section"><% $c->i18n->localize($c, "Qur'an Options", { context => 'side navigation, section label' }) %></label>
+			<label class="control"><% $c->i18n->localize($c, 'text size', { context => 'side navigation, text size control label' }) %></label>
+		</div>
+		<div class="control textSize">
+			<input class="textSize ajax" data-class="quran" type="hidden" data-min="60" data-max="200" data-inc="10" value="<% $session->{selected}->{size}->{quran} %>"/>
+			<div class="button minus">
+				<span class="icon text minus">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+			<div class="button plus">
+				<span class="icon text plus">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="body">
+		<table>
+			<col class="a"/>
+			<col class="b"/>
+			<tbody class="words">
+<!-- selected? -->
+				<tr>
+					<td class="input"><input class="selectResource ajax" data-class="quran" data-type="words"  type="radio" name="quran"/></td>
+<!-- checked? -->
+					<td class="label"><label><% $c->i18n->localize($c, 'Word-for-Word System') %></label></td>
+				</tr>
+			</tbody>
+			<tbody class="images">
+<!-- selected? -->
+				<tr>
+					<td class="input"><input class="selectResource ajax" data-class="quran" data-type="images" type="radio" name="quran"/></td>
+<!-- checked? -->
+					<td class="label"><label><% $c->i18n->localize($c, "Qur'an Complex Images") %></label></td>
+				</tr>
+			</tbody>
+			<tbody class="text">
+<!-- selected? -->
+				<tr>
+					<td class="input"><input class="selectResource ajax" data-class="quran" data-type="text"   type="radio" name="quran"/></td>
+<!-- checked? -->
+					<td class="label">
+						<div class="wrap">
+							<div class="selectBox">
+								<div class="selection">
+									<label class="label"><% $c->i18n->localize($c, 'Text : {name}', { context => 'text option header', token => { name => $c->i18n->localize($c, 'Uthmani', { context => 'text option' }) }}) %></label>
+									<button class="button down">
+										<span class="icon scroll down">
+											<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+										</span>
+									</button>
+								</div>
+								<ul class="list">
+									<%perl>for my $text (@{ $stash->{options}->{quran}->{text} }) {</%perl>
+									<li class="item" data-value="<% $text->{name} %>"><% $c->i18n->localize($c, $text->{label}, { context => 'text option' }) %></li>
+<!-- selected? -->
+									<%perl>}</%perl>
+								</ul>
+								<input class="selectResource ajax" type="hidden" data-class="quran" data-type="text" value="uthmani"/>
+<!-- selected name -->
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

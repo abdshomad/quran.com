@@ -1,0 +1,47 @@
+		<div class="menu">
+			<div class="head">
+				<span class="icon account member">
+					<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+				</span>
+				<label class="name"><var:name></label>
+			</div>
+			<div class="body">
+				<menu>
+					<li class="groups disabled" data-id="groups">
+						<label><% $c->i18n->localize($c, 'Groups') %></label>
+						<span class="tip">(<% $c->i18n->localize($c, 'in development') %>)</span>
+					</li>
+					<li class="tags disabled" data-id="tags">
+						<label><% $c->i18n->localize($c, 'Tags') %></label>
+						<span class="tip">(<% $c->i18n->localize($c, 'in development') %>)</span>
+					</li>
+					<li class="notes disabled" data-id="notes">
+						<label><% $c->i18n->localize($c, 'Notes') %></label>
+						<span class="tip">(<% $c->i18n->localize($c, 'in development') %>)</span>
+					</li>
+					<li class="bookmarks disabled" data-id="bookmarks">
+						<label><% $c->i18n->localize($c, 'Bookmarks') %></label>
+						<span class="tip">empty (no bookmarks)</span>
+					</li>
+					<li class="lastmark disabled" data-id="lastmark">
+						<label><% $c->i18n->localize($c, 'Lastmark') %></label>
+						<span class="tip">empty (no lastmark)</span>
+					</li>
+					<li class="sign-out" data-id="sign-out">
+						<label><% $c->i18n->localize($c, 'Sign out') %></label>
+					</li>
+				</menu>
+				<div class="groups panel" data-id="groups">
+					<div class="content"></div>
+				</div>
+				<div class="bookmarks panel" data-id="bookmarks">
+					<div class="content"></div>
+				</div>
+				<div class="notes panel" data-id="notes">
+					<div class="content"></div>
+				</div>
+				<div class="tags panel" data-id="tags">
+					<div class="content"></div>
+				</div>
+			</div>
+		</div>

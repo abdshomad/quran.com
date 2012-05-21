@@ -1,0 +1,13 @@
+<div id="network">
+	<%perl>for my $site (@{ $stash->{network} }) {</%perl>
+	<span title="<% $site->{title} %>" class="site<% $site->{url} eq 'http://beta.quran.com' ? ' home' : '' %>">
+		<%perl>if ($site->{new}) {</%perl>
+		<b class="new">New&nbsp;:</b>
+		<%perl>}</%perl>
+		<a href="<% $site->{url} %>"><% $site->{label} %></a>
+		<%perl>if ($site->{labs}) {</%perl>
+		<b class="beta"><img src="/static/images/png/labs.png" alt="(beta)"/></b>
+		<%perl>}</%perl>
+	</span>
+	<%perl>}</%perl>
+</div>

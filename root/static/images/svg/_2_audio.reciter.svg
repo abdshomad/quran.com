@@ -1,0 +1,68 @@
+<svg height="256" version="1.1" width="256" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-2 -2 32 32">
+	<defs>
+		<linearGradient id="active-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.86"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="active-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#333;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#000;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="hover-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#ddd;stop-opacity:0.62"/>
+		</linearGradient>
+		<linearGradient id="hover-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#88B;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#78C;stop-opacity:1"/>
+		</linearGradient>
+		<linearGradient id="default-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#fff;stop-opacity:0.62"/>
+			<stop offset="100%" style="stop-color:#fff;stop-opacity:0.38"/>
+		</linearGradient>
+		<linearGradient id="default-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#999;stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:#666;stop-opacity:1"/>
+		</linearGradient>
+		<path id="path" d="
+M 0 0
+m 0,0 c 2.442802,0 4.423077,-1.980275 4.423077,-4.423077 0,-2.442802 -1.980275,-4.423077 -4.423077,-4.423077 -2.442802,0 -4.423077,1.980275 -4.423077,4.423077 C -4.423077,-1.980275 -2.442802,0 0,0 m 11.010549,9.254451 c 0.66044,0.660385 1.943791,0.54489 2.56533,-0.076593 C 14.197582,8.5561 14.312967,7.272913 13.652472,6.612473 13.240494,6.200495 8.578351,1.538352 5.479505,-1.560494 c -0.59033,1.127582 -1.518132,2.05044 -2.64967,2.634176 3.098846,3.098846 7.768462,7.768516 8.180714,8.180769 M 0,-10.604396 c 3.413846,0 6.181319,2.767473 6.181319,6.181319 0,0.339615 -0.027802,0.672637 -0.080495,0.997363 l 8.718407,8.718736 c 1.156703,1.156429 1.368132,2.9 0.63533,4.271703 0.0081,0.011099 0.01632,0.022088 0.02412,0.033791 2.905604,3.268736 1.089615,6.537637 -1.815989,6.537637 -2.905604,0 -6.537582,-3.268901 -8.716703,-3.268901 -2.179286,0 -3.268901,1.816044 -2.542473,3.268901 -0.363187,1.08956 -1.384725,0.907857 -1.952198,-0.181703 -0.522088,-3.631868 2.678571,-4.971209 4.131374,-4.903077 3.268791,-0.06813 6.537582,3.268791 9.08,3.268791 1.815989,0 1.452802,-2.542418 0.363187,-3.268791 -0.0077,-0.0059 -0.01484,-0.01176 -0.02242,-0.01764 -1.377912,0.759341 -3.144341,0.555824 -4.312637,-0.612747 L 0.954505,1.684835 C 0.643352,1.733077 0.324615,1.758242 0,1.758242 c -3.413846,0 -6.181319,-2.767473 -6.181319,-6.181319 0,-3.413846 2.767473,-6.181319 6.181319,-6.181319
+Z
+"/>
+		<style type="text/css"><![CDATA[
+			.fill {
+				stroke: none;
+			}
+			.fill.default {
+				fill: url(#default-fill);
+			}
+			.fill.hover {
+				fill: url(#hover-fill);
+			}
+			.fill.active {
+				fill: url(#active-fill);
+			}
+			.stroke {
+				fill: none;
+				stroke-width: 4;
+				stroke-linejoin: round;
+			}
+			.stroke.default {
+				stroke: url(#default-stroke)
+			}
+			.stroke.hover {
+				stroke: url(#hover-stroke)
+			}
+			.stroke.active {
+				stroke: url(#active-stroke)
+			}
+		]]></style>
+	</defs>
+	<rect x="-2" y="-2" width="100%" height="100%" r="0" rx="0" ry="0" fill="white" stroke="none" opacity="0"/>
+	<g transform="translate(0,0)">
+		<g transform="scale(1)">
+			<use id="stroke" xlink:href="#path" class="stroke default"/>
+			<use id="fill" xlink:href="#path" class="fill default"/>
+		</g>
+	</g>
+</svg>

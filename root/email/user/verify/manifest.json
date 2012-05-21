@@ -1,0 +1,12 @@
+{
+"renderer": "TT",
+"header": [
+		{    "From" : "quran.com accounts <accounts@quran.com>" },
+		{      "To" : "[% name %] <[% email %]>" },
+		{ "Subject" : "Activate your quran.com account" }
+	],
+"alternatives": [
+		{"type": "text/plain", "path": "body.txt"  },
+		{"type": "text/html",  "path": "body.html" }
+	]
+}

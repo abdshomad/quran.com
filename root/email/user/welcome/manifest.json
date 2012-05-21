@@ -1,0 +1,12 @@
+{
+"renderer": "TT",
+"header": [
+		{    "From" : "quran.com <accounts@quran.com>" },
+		{      "To" : "[% name %] <[% email %]>" },
+		{ "Subject" : "[% name %], welcome to quran.com !" }
+	],
+"alternatives": [
+		{"type": "text/plain", "path": "body.txt"  },
+		{"type": "text/html",  "path": "body.html" }
+	]
+}

@@ -1,0 +1,94 @@
+<%init>
+	$stash = $c->stash;
+	$view = $c->controller('View');
+	$request = $c->request;
+	$params = $request->params;
+	$session = $c->session;
+</%init>
+%	my $template = $m->scomp('screen/_global/body.mhtml');
+<!DOCTYPE html>
+<html lang="<% $stash->{language}->{language_code} %>" dir="<% $stash->{language}->{direction} %>">
+	<head>
+		<meta charset="utf-8" />
+
+		<title>beta.quran.com - <% $c->request->uri->path .' - '. $c->i18n->localize($c, "The Noble Qur'an", { context => 'website title', attribute => 1 }) %></title>
+
+		<%perl>
+			if ($stash->{static}->{css}) {
+				if (ref $stash->{static}->{css} eq 'ARRAY') {
+					for (@{ $stash->{static}->{css} }) {
+		</%perl>
+		<link rel="stylesheet" type="text/css" media="screen" href="/static/css/<% $_ %>" />
+		<%perl>
+					}
+				}
+				else {
+		</%perl>
+		<link rel="stylesheet" type="text/css" media="screen" href="/static/css/screen.css"/>
+		<%perl>
+				}
+			}
+			if (exists $stash->{fonts}->{css}) {
+		</%perl>
+		<style type="text/css" id="fonts"><% $stash->{fonts}->{css} %></style>
+		<%perl>
+			}
+			if ($c->debug) {
+		</%perl>
+		<script type="text/javascript" src="/static/js/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+			if (!(jQuery.browser.safari && jQuery.browser.webkit) && !('console' in window && 'firebug' in console)) { // mute firebug if not supported
+				window.console = {};
+				var methods = ['log','debug','info','warn','error','assert','dir','dirxml','group','groupEnd','time','timeEnd','count','trace','profile','profileEnd'];
+				for (var i = 0; i < methods.length; i++)
+					window.console[methods[i]] = function() {};
+			}
+		</script>
+		<%perl>
+			} else {
+		</%perl>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-24143115-1']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<%perl>
+			}
+		</%perl>
+	</head>
+	<body<% $c->user_exists ? ' class="account"' : '' %>>
+	<%perl>
+		print $view->get($c, $m, '/screen/_global/head.mhtml', {
+			name => ( $c->user_exists ? $c->user->name : '' )
+		}, {
+			language_code => $stash->{language}->{language_code},
+			class => $stash->{class},
+			surah => $stash->{page}->{surah},
+			user => $c->user_exists,
+		}) if $stash->{include}->{head};
+		$m->comp('screen/_global/body.mhtml')
+			if $stash->{include}->{body};
+		$m->call_next
+			unless $stash->{include}->{body};
+		print $view->get($c, $m, '/screen/_global/foot.mhtml')
+			if $stash->{include}->{foot};
+		if ($stash->{static}->{js}) {
+	</%perl>
+		<script type="text/javascript" src="/static/js/screen.js"></script>
+		<script type="text/javascript">
+			window.quran = new Quran(<% $stash->{json} ? $stash->{json} : '' %>);
+		</script>
+	<%perl>
+		}
+	</%perl>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+<div class="surahs scroll-list">
+	<div class="list">
+		<div class="outer wrap">
+			<div class="inner wrap">
+				<ul>
+				<%perl>
+					for my $i (1..114) {
+						my $selected = ( $stash->{page}->{surah} and $stash->{page}->{surah} == $i );
+				</%perl>
+					<li class="<% $selected ? 'selected surah' : 'surah' %>"><a<% $selected ? '' : ' href="/'. $stash->{language}->{language_code} .'/'. $i .'"' %>><span class="number"><% $c->i18n->localize($c, $i, { context => 'number' }) %></span><span class="juz"><% $c->i18n->localize($c, 'Juz {number}', { context => 'part number', token => { number => $c->i18n->localize($c, $stash->{surahs}->[$i-1]->{juz}, { context => 'number' }) } }) %></span><span class="name"><% $c->i18n->localize($c, $stash->{surahs}->[$i-1]->{simple}, { context => 'chapter title' }) %></span><span class="bg"></span></a></li>
+				<%perl>
+					}
+				</%perl>
+				</ul>
+				<div class="strip"></div>
+			</div>
+		</div>
+	</div>
+	<div class="scroll">
+		<div class="button up">
+			<span class="icon scroll up">
+				<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+			</span>
+		</div>
+		<div class="range">
+			<div class="bar"></div>
+		</div>
+		<div class="button down">
+			<span class="icon scroll down">
+				<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+			</span>
+		</div>
+	</div>
+</div>

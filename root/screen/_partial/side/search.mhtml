@@ -1,0 +1,26 @@
+<form class="search" method="GET" action="/<% $stash->{language}->{language_code} %>/search">
+	<input class="query sans i18n" data-message="Search..." data-context="search field, default text" type="search" name="q" data-value-default="<var:value>" value="<var:value>" autocomplete="off" autofocus="autofocus"/>
+	<!-- TODO: show random suggestions on focus, selecting from an array with suggestions such as "want to search transliteration? try 'translit: wamen annas'" -->
+	<input type="hidden" name="p" value="1" />
+	<input type="hidden" name="t" value="auto" class="type" />
+	<button type="button" class="type"><span class="down"></span></button>
+	<div class="type">
+		<ul class="sans">
+			<li data-value="auto" class="selected"><% $c->i18n->localize($c, 'Auto') %></li>
+			<li data-value="quran"><% $c->i18n->localize($c, 'Quran (Arabic)') %></li>
+			<li data-value="translation"><% $c->i18n->localize($c, 'Translation') %></li>
+			<li data-value="transliteration"><% $c->i18n->localize($c, 'Transliteration') %></li>
+		</ul>
+		<menu class="sans">
+			<li class="selected">&#10004;</li>
+			<li>&#10004;</li>
+			<li>&#10004;</li>
+			<li>&#10004;</li>
+		</menu>
+	</div>
+	<button type="button" class="find">
+		<span class="icon find">
+			<b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b>
+		</span>
+	</button>
+</form>

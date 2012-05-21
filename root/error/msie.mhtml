@@ -1,0 +1,23 @@
+<%flags>
+	inherit => undef
+</%flags>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>We do not support Internet Explorer</title>
+		<style type="text/css">
+			h1, h2, h3, h4 { clear: both; }
+			a { width: 128px;display: block; float: right; margin-right: 25px; text-align: center; text-decoration: none; color: black; font-weight: bold; font-size: 25px; }
+			a label { color: #383774; display: block; margin-top: 10px; white-space: nowrap; }
+		</style>
+	</head>
+	<body>
+		<h1>We do not plan on supporting Internet Explorer in the next version of quran.com</h1>
+		<h2>(atleast while it's in beta), so in the meantime, please upgrade to any of the following browsers:</h2>
+		<a href="http://www.opera.com/browser/download/"><img src="/static/images/png/browsers/opera.png" alt="Opera"><label>Opera</label></a>
+		<a href="http://www.apple.com/safari/download/"><img src="/static/images/png/browsers/safari.png" alt="Safari"><label>Safari</label></a>
+		<a href="http://www.mozilla.com/firefox/new/"><img src="/static/images/png/browsers/firefox.png" alt="Firefox"><label>Firefox</label></a>
+		<a href="http://www.google.com/chrome/"><img src="/static/images/png/browsers/chrome.png" alt="Chrome"><label>Chrome</label></a>
+	</body>
+</html>

@@ -1,0 +1,24 @@
+diff -crB contrib/pg_trgm/trgm.h /home/nour/code/quran.com-beta/dev/database/postgresql/contrib/pg_trgm/trgm.h
+*** contrib/pg_trgm/trgm.h	Fri Apr 15 03:15:53 2011
+--- /home/nour/code/quran.com-beta/dev/database/postgresql/contrib/pg_trgm/trgm.h	Sat Jul  2 13:09:34 2011
+***************
+*** 12,21 ****
+  #include "storage/bufpage.h"
+  
+  /* options */
+! #define LPADDING		2
+! #define RPADDING		1
+! #define KEEPONLYALNUM
+! #define IGNORECASE
+  #define DIVUNION
+  
+  
+--- 12,19 ----
+  #include "storage/bufpage.h"
+  
+  /* options */
+! #define LPADDING		0
+! #define RPADDING		0
+  #define DIVUNION
+  
+  

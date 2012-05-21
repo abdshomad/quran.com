@@ -1,0 +1,17 @@
+This is source code for quran.com beta development. Some components (such as
+database dump, fonts, config files) are missing for security or because they
+are too big or not appropriate for repository storage. PostgreSQL uses custom
+modules. If you need help installing because you're not familiar with Perl or
+don't have experience using CPAN to install dependencies, this is not for you.
+If you need help installing or require missing components such as the database
+or fonts, please send an email to nour@quran.com.
+
+
+This package is open-source. You are free to use it as you like as long as you
+return credit in any place appropriate and notify me via email if you branch
+or republish the code with any useful features, sharing the new source back
+with us so that we can incorporate the best of it back in.
+
+Thank you, wsalam 3alaykum,
+Nour Sharabash
+nour@quran.com

@@ -1,0 +1,24 @@
+<div id="head">
+	<& /screen/_global/head/network.mhtml &>
+	<& /screen/_global/head/language.mhtml &>
+	<%perl>if ($stash->{class} eq 'main') {</%perl>
+		<& /screen/_global/head/title.mhtml &>
+	<%perl>}</%perl>
+	<div id="logo"><span class="logo"></span></div>
+	<div id="account">
+		<span class="sign">
+	<%perl>unless ($c->user_exists) {</%perl>
+			<b class="in"><a><% $c->i18n->localize($c, 'Sign in') %></a></b>
+			<a class="sep"></a>
+			<b class="up"><a><% $c->i18n->localize($c, 'Create new account') %></a></b>
+	<%perl>} else {</%perl>
+			<b class="out"><a href="/sign/out"><% $c->i18n->localize($c, 'Sign out') %></a></b>
+	<%perl>}</%perl>
+		</span>
+	<%perl>if ($c->user_exists) {</%perl>
+		<a class="sep"></a>
+		<span class="name">${ name }</span>
+%#	<& /screen/_partial/head/menu.mhtml &>
+	<%perl>}</%perl>
+	</div>
+</div>

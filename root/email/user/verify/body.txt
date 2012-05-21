@@ -1,0 +1,6 @@
+[% name %], please verify your email address.
+
+quran.com needs to verify your email address to activate your account.
+
+To activate your quran.com account please copy and paste the following URL
+into your web browser's location field: http://beta.quran.com/sign/up/verify/[% token %]

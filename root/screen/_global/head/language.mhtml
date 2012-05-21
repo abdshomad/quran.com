@@ -1,0 +1,4 @@
+<div id="language">
+	<label><% $c->i18n->localize($c, 'Your language : {language}', { context => 'language menu, header', token => { language => $stash->{language}->{unicode} } }) %></label>
+	<span class="icon language"><b><s class="s1"></s><s class="s2"></s><s class="s3"></s></b></span>
+</div>
