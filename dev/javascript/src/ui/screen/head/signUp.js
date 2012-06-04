@@ -2,7 +2,7 @@
 
 	jQuery.template('quran.account.sign-up', '\
 		<div class="purchase">\
-			<h3 class="about"><a>${ quran.localize("What can you do with a quran.com account? Click here to learn more.") }</a></h3>\
+			<h3 class="about"><a style="display: none !important;">${ quran.localize("What can you do with a quran.com account? Click here to learn more.") }</a></h3>\
 			<form>\
 				<table class="validate">\
 					<tbody class="name">\
@@ -62,24 +62,24 @@
 					</tbody>\
 				</table>\
 				<div class="purchase-or-create">\
-					<h2>${ quran.localize("Do you want to purchase your quran.com account?") }</h2>\
-					<div class="option purchase selected">\
+					<h2>${ quran.localize("Would you like to donate to support quran.com server costs?") }</h2>\
+					<div class="option create selected">\
 						<label>\
-							<input class="purchase" type="radio" name="purchase" value="1" checked="checked"/>\
-							<span>Yes, let me purchase my quran.com account for this price:</span>\
+							<input class="create" type="radio" name="purchase" value="0" checked="checked"/>\
+							<span>No, just create an account.</span>\
+						</label>\
+					</div>\
+					<div class="option purchase">\
+						<label>\
+							<input class="purchase" type="radio" name="purchase" value="1"/>\
+							<span>Yes, create an account and allow me to donate this amount:</span>\
 						</label>\
 						<abbr title="United States Dollars">$</abbr> <input name="payment" class="payment" type="text" value="10" /> <abbr title="United States Dollars">USD</abbr>.\
-					</div>\
-					<div class="option create">\
-						<label>\
-							<input class="create" type="radio" name="purchase" value="0"/>\
-							<span>No, create my quran.com account free for now (and I&#39;ll pay later if I choose to).</span>\
-						</label>\
 					</div>\
 				</div>\
 			</form>\
 			<aside>\
-				<p><strong>quran.com accounts cost 10.00 USD</strong>, but if you don&#39;t want to purchase you can have it <strong>free</strong>. If you find our service valuable and are able to purchase, please do so as proceeds help fund our development and pay for ongoing operating expenses (وجزاكم الله خيرا)</p>\
+				<p><strong>quran.com accounts are free</strong>, but if you would like to donate to support operating costs, then we thank you and it is appreciated, may Allah accept.</p>\
 			</aside>\
 		</div>\
 	');
@@ -129,7 +129,7 @@
 	jQuery.template('quran.account.sign-up.signed-up', '\
 		<div>\
 			{{if purchase}}\
-			<h2>Thank you for purchasing your account, ${ name }.</h2>\
+			<h2>Thank you for donating and creating your account, ${ name }.</h2>\
 			{{else}}\
 			<h2>Thank you for creating your account, ${ name }.</h2>\
 			{{/if}}\
@@ -338,7 +338,7 @@
 		},
 		_purchase_or_create: function(params) {
 			var self = this,
-				message = params.purchase ? 'purchasing account' : 'creating account',
+				message = params.purchase ? 'loading PayPal and creating account' : 'creating account',
 				url = params.purchase ? '/sign/up/purchase' : '/sign/up/create';
 
 			self.element.modal('status', 'loading', message);
@@ -377,7 +377,7 @@
 				if (data.created == 0)
 					self.element.modal('status', 'error', 'could not create account');
 				else if (data.purchased == 0)
-					self.element.modal('status', 'error', 'transaction failed, account not purchased');
+					self.element.modal('status', 'error', 'transaction failed');
 			}
 		}
 	};

@@ -46,3 +46,17 @@ BUGS
 INSTALL
 TODO
 Makefile.PL
+root/static/css/*.backup.*
+dev/javascript/.dist/
+dev/javascript/documentjs/
+dev/javascript/jquery/
+dev/javascript/mxui/
+dev/javascript/steal/
+dev/utils/
+jira/
+root/static/.cache/
+root/static/css/deprecated.css
+script/dequeue.social.pl
+script/request.pl
+changes
+conf/
