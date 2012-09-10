@@ -35,6 +35,9 @@ __PACKAGE__->apply_request_class_roles ('Catalyst::TraitFor::Request::BrowserDet
 
 our $VERSION = '1.4320901'; # i.e. target date to production is Ramadan (09), day 1 (01), year 1432 rev. 001
 
+use YAML qw/LoadFile/;
+my $config = LoadFile( "$ENV{QURAN_BASE_DIR}/quran.yml" );
+
 __PACKAGE__->config(
 	name => 'Quran',
 	encoding => 'UTF-8',
@@ -93,13 +96,13 @@ __PACKAGE__->config(
 		expires => 604800, # 1 week
 		profile => 'session',
 	},
+	%{ $config }
 );
 
 __PACKAGE__->setup();
 
 __PACKAGE__->config->{paypal} = __PACKAGE__->config->{paypal}->{sandbox} if __PACKAGE__->debug;
 
-# TODO :
 # refactor setting and memcache below into models
 
 sub setting {

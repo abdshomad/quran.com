@@ -1,8 +1,21 @@
 #!/usr/bin/env perl
+# vim: ts=4 sw=4 noexpandtab
+our %dir;
 
 BEGIN {
-    $ENV{CATALYST_SCRIPT_GEN} = 40;
-		$ENV{DBIC_TRACE} = '1=./.dbic.trace.out';
+	use File::Basename 'dirname';
+	use File::Spec::Functions qw/catdir splitdir/;
+
+	$dir{base} = join '/', (splitdir(dirname(__FILE__)), '..');
+	$dir{script} = "$dir{base}/script";
+	$dir{lib} = "$dir{base}/lib";
+	$dir{log} = "$dir{base}/log";
+
+	unshift @INC, $dir{lib};
+
+	$ENV{DBIC_TRACE} = "1=$dir{log}/database.log" if -e $dir{log};
+	$ENV{QURAN_BASE_DIR} = $dir{base};
+	$ENV{CATALYST_SCRIPT_GEN} = 40;
 };
 
 use Catalyst::ScriptRunner;
